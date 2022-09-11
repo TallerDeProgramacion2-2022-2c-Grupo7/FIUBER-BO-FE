@@ -2,13 +2,15 @@ import React, { useState } from "react";
 import logo from "./logo.svg";
 import "./App.css";
 
+const API_URL = process.env.REACT_APP_API_URL;
+
 function App() {
   let [text, setText] = useState("");
   let makeRequest = (e) => {
     e.preventDefault();
-    fetch("http://localhost:3000")
-      .then(res => res.json())
-      .then(data => setText(data["message"]));
+    fetch(`${API_URL}/hola`)
+      .then(res => res.text())
+      .then(message => setText(message));
   };
   return (
     <div className="App">
