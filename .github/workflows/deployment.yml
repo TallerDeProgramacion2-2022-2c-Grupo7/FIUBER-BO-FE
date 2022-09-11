@@ -2,9 +2,9 @@ name: Deployment CI
 
 on:
   push:
-    branches: [ "master" ]
+    branches: [ "main" ]
   pull_request:
-    branches: [ "master" ]
+    branches: [ "main" ]
 
 jobs:
   deploy:
@@ -27,7 +27,7 @@ jobs:
         uses: docker/build-push-action@v3
         with:
           push: true
-          tags: mhuenul/${{ github.event.repository.name }}:latest
+          tags: mhuenul/fiuber-bo-fe:latest
       -
         name: Checkout repository
         uses: actions/checkout@v3
