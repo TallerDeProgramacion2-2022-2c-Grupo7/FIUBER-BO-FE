@@ -12,6 +12,11 @@ import Grid from '@mui/material/Grid';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import {
+  useNavigate,
+  useLocation,
+} from "react-router-dom";
+import { useAuth } from "../contexts/Auth";
 
 function Copyright(props) {
   return (
@@ -28,7 +33,23 @@ function Copyright(props) {
 
 const theme = createTheme();
 
-export default function SignIn({handleSubmit}) {
+export default function LogIn() {
+  let navigate = useNavigate();
+  let location = useLocation();
+  let auth = useAuth();
+  let from = location.state?.from?.pathname || "/protected";
+
+  function handleSubmit(event) {
+    event.preventDefault();
+
+    let formData = new FormData(event.currentTarget);
+    let username = formData.get("email");
+
+    auth.login(username, () => {
+      navigate(from, { replace: true });
+    });
+  }
+
   return (
     <ThemeProvider theme={theme}>
       <Grid container component="main" sx={{ height: '100vh' }}>
@@ -39,7 +60,7 @@ export default function SignIn({handleSubmit}) {
           sm={4}
           md={7}
           sx={{
-            backgroundImage: 'url(https://source.unsplash.com/random)',
+            backgroundImage: 'url(https://wallpapercave.com/wp/wp2290778.jpg)',
             backgroundRepeat: 'no-repeat',
             backgroundColor: (t) =>
               t.palette.mode === 'light' ? t.palette.grey[50] : t.palette.grey[900],
@@ -61,7 +82,7 @@ export default function SignIn({handleSubmit}) {
               <LockOutlinedIcon />
             </Avatar>
             <Typography component="h1" variant="h5">
-              Sign in to FI-UBER's backoffice
+              Log in to FI-UBER's backoffice
             </Typography>
             <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 1 }}>
               <TextField
@@ -94,7 +115,7 @@ export default function SignIn({handleSubmit}) {
                 variant="contained"
                 sx={{ mt: 3, mb: 2 }}
               >
-                Sign In
+                Log in
               </Button>
               <Grid container>
                 <Grid item xs>
@@ -102,11 +123,6 @@ export default function SignIn({handleSubmit}) {
                     Forgot password?
                   </Link>
                 </Grid>
-                {/* <Grid item>
-                  <Link href="#" variant="body2">
-                    {"Don't have an account? Sign Up"}
-                  </Link>
-                </Grid> */}
               </Grid>
               <Copyright sx={{ mt: 5 }} />
             </Box>
