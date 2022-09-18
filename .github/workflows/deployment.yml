@@ -9,6 +9,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       -
+        name: Set APP_NAME environment variable
+        run: echo "APP_NAME=$(echo ${{ github.event.repository.name }} | tr '[:upper:]' '[:lower:]')" >> $GITHUB_ENV
+      -
         name: Checkout repository
         uses: actions/checkout@v3
       -
@@ -32,10 +35,10 @@ jobs:
         with:
           context: .
           push: true
-          tags: mhuenul/fiuber-bo-fe:latest
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.APP_NAME }}:latest
       -
-        name: Set APP_NAME
-        run: sed -i "s/\$APP_NAME/$(echo ${{ github.event.repository.name }} | tr '[:upper:]' '[:lower:]')/g" ./kubernetes.yml
+        name: Configure kubernetes.yml
+        run: sed -i "s/\$APP_NAME/${{ env.APP_NAME }}/g" ./kubernetes.yml && sed -i "s/\$DOCKERHUB_USERNAME/${{ secrets.DOCKERHUB_USERNAME }}/g" ./kubernetes.yml
       -
         name: Debug
         run: cat ./kubernetes.yml
