@@ -33,10 +33,10 @@ const fakeAuthProvider = {
   login({username, password},  callback) {
     // fakeAuthProvider.isAuthenticated = true;
     // setTimeout(callback, 100); // fake async
-    console.log('LOGIN', username, password);
+    // console.log('LOGIN', username, password);
     signInWithEmailAndPassword(auth, username, password).then((user) => {
-      console.log('User', JSON.stringify(user));
-      console.log('Current', JSON.stringify(auth.currentUser));
+      // console.log('User', JSON.stringify(user));
+      // console.log('Current', JSON.stringify(auth.currentUser));
       callback(user.user);
     })
   },

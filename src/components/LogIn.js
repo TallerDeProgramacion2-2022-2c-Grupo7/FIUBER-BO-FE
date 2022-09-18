@@ -45,7 +45,7 @@ export default function LogIn() {
     let formData = new FormData(event.currentTarget);
     let username = formData.get("email");
     let password = formData.get("password")
-    console.log('handleSubmit', username, password);
+    // console.log('handleSubmit', username, password);
 
 
     auth.login({ username, password }, () => {
