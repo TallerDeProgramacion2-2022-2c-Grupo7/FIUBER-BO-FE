@@ -3,15 +3,9 @@ import {
   useLocation,
   Navigate,
 } from "react-router-dom";
-
-// Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth"
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
 
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
   apiKey: "AIzaSyA5_ujrP3dxsFWTgOgqLag8Wi8ubHUtcME",
   authDomain: "fiuber.firebaseapp.com",
@@ -22,51 +16,21 @@ const firebaseConfig = {
   measurementId: "G-6W43T36L2V"
 };
 
-// Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
-
-
-// This represents some generic auth provider API, like Firebase.
-const fakeAuthProvider = {
-  isAuthenticated: false,
-  login({username, password},  callback) {
-    // fakeAuthProvider.isAuthenticated = true;
-    // setTimeout(callback, 100); // fake async
-    // console.log('LOGIN', username, password);
-    signInWithEmailAndPassword(auth, username, password).then((user) => {
-      // console.log('User', JSON.stringify(user));
-      // console.log('Current', JSON.stringify(auth.currentUser));
-      callback(user.user);
-    })
-  },
-  logout(callback) {
-    fakeAuthProvider.isAuthenticated = false;
-    setTimeout(callback, 100);
-  },
-};
-
 const AuthContext = React.createContext();
-
-function useAuth() {
-  return React.useContext(AuthContext);
-}
+const useAuth = () => React.useContext(AuthContext);
 
 function AuthProvider({ children }) {
   let [user, setUser] = React.useState(null);
 
-  let login = (user, callback) => {
-    return fakeAuthProvider.login(user, (logedInUser) => {
-      setUser(logedInUser);
-      callback();
-    });
-  };
+  let login = async (email, password) => {
+    const response = await signInWithEmailAndPassword(auth, email, password);
+    return setUser(response.user);
+  }
 
-  let logout = (callback) => {
-    return fakeAuthProvider.logout(() => {
-      setUser(null);
-      callback();
-    });
+  let logout = async () => {
+    setUser(null);
   };
 
   let value = { user, login, logout };
