@@ -9,7 +9,7 @@ export default function App() {
       <AuthProvider>
         <Routes>
           <Route path="/" element={<LogIn />} />
-          <Route path="/protected" element={<Dashboard />} />
+          <Route path="/dashboard" element={<Dashboard />} />
         </Routes>
       </AuthProvider>
     );

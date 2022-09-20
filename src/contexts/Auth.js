@@ -3,41 +3,34 @@ import {
   useLocation,
   Navigate,
 } from "react-router-dom";
+import { initializeApp } from "firebase/app";
+import { getAuth, signInWithEmailAndPassword } from "firebase/auth"
 
-// This represents some generic auth provider API, like Firebase.
-const fakeAuthProvider = {
-  isAuthenticated: false,
-  login(callback) {
-    fakeAuthProvider.isAuthenticated = true;
-    setTimeout(callback, 100); // fake async
-  },
-  logout(callback) {
-    fakeAuthProvider.isAuthenticated = false;
-    setTimeout(callback, 100);
-  },
+const firebaseConfig = {
+  apiKey: "AIzaSyA5_ujrP3dxsFWTgOgqLag8Wi8ubHUtcME",
+  authDomain: "fiuber.firebaseapp.com",
+  projectId: "fiuber",
+  storageBucket: "fiuber.appspot.com",
+  messagingSenderId: "595724404035",
+  appId: "1:595724404035:web:3002641d5eb53e2c119bf6",
+  measurementId: "G-6W43T36L2V"
 };
 
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
 const AuthContext = React.createContext();
-
-function useAuth() {
-  return React.useContext(AuthContext);
-}
+const useAuth = () => React.useContext(AuthContext);
 
 function AuthProvider({ children }) {
   let [user, setUser] = React.useState(null);
 
-  let login = (newUser, callback) => {
-    return fakeAuthProvider.login(() => {
-      setUser(newUser);
-      callback();
-    });
-  };
+  let login = async (email, password) => {
+    const response = await signInWithEmailAndPassword(auth, email, password);
+    return setUser(response.user);
+  }
 
-  let logout = (callback) => {
-    return fakeAuthProvider.logout(() => {
-      setUser(null);
-      callback();
-    });
+  let logout = async () => {
+    setUser(null);
   };
 
   let value = { user, login, logout };
