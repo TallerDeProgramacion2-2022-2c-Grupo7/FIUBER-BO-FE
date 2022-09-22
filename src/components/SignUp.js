@@ -12,6 +12,7 @@ import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { RequireAuth, useAuth } from '../contexts/Auth';
 import { Alert, AlertTitle } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 
 function Copyright(props) {
   return (
@@ -31,6 +32,7 @@ const theme = createTheme();
 export default function SignUp() {
   let auth = useAuth();
   let [errorMessage, setErrorMessage] = React.useState(null);
+  let navigate = useNavigate();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -45,6 +47,7 @@ export default function SignUp() {
         setErrorMessage("Please fill all required values.");
       } else {
         await auth.createUser(firstName, lastName, email, password);
+        navigate("/dashboard", { replace: true, state: { adminRegistered: true } });
       }
     } catch (error) {
       if (error.code === "auth/email-already-in-use") {
@@ -57,10 +60,13 @@ export default function SignUp() {
       }
     }
   };
-
+  
   return (
     <RequireAuth>
       <ThemeProvider theme={theme}>
+        <Button onClick={() => navigate("/dashboard", { replace: true })} variant="outlined" sx={{ mt: '.75rem', ml: '.75rem' }}>
+          Go to dashboard
+        </Button>
         <Container component="main" maxWidth="xs">
           <CssBaseline />
           <Box
@@ -75,7 +81,7 @@ export default function SignUp() {
               <LockOutlinedIcon />
             </Avatar>
             <Typography component="h1" variant="h5">
-              Sign up
+              Administrator Sign up
             </Typography>
             <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
               <Grid container spacing={2}>

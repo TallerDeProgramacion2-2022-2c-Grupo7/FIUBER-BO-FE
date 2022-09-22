@@ -2,9 +2,10 @@ import * as React from "react";
 import {
   useLocation,
   Navigate,
+  useNavigate,
 } from "react-router-dom";
 import { initializeApp } from "firebase/app";
-import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword } from "firebase/auth";
+import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut } from "firebase/auth";
 
 const firebaseConfig = {
   apiKey: "AIzaSyA5_ujrP3dxsFWTgOgqLag8Wi8ubHUtcME",
@@ -23,6 +24,7 @@ const useAuth = () => React.useContext(AuthContext);
 
 function AuthProvider({ children }) {
   let [user, setUser] = React.useState(null);
+  let navigate = useNavigate();
 
   let login = async (email, password) => {
     const response = await signInWithEmailAndPassword(auth, email, password);
@@ -30,7 +32,9 @@ function AuthProvider({ children }) {
   }
 
   let logout = async () => {
+    await signOut(auth);
     setUser(null);
+    navigate("/", { replace: true });
   };
 
   let createUser = async (firstName, lastName, email, password) => {
