@@ -4,7 +4,7 @@ import {
   Navigate,
 } from "react-router-dom";
 import { initializeApp } from "firebase/app";
-import { getAuth, signInWithEmailAndPassword } from "firebase/auth"
+import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword } from "firebase/auth";
 
 const firebaseConfig = {
   apiKey: "AIzaSyA5_ujrP3dxsFWTgOgqLag8Wi8ubHUtcME",
@@ -33,7 +33,14 @@ function AuthProvider({ children }) {
     setUser(null);
   };
 
-  let value = { user, login, logout };
+  let createUser = async (firstName, lastName, email, password) => {
+    console.log({ firstName, lastName, email, password });
+    window.auth = auth;
+    const response = await createUserWithEmailAndPassword(auth, email, password);
+    window.firebase_response = response;
+  };
+
+  let value = { user, login, logout, createUser };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }

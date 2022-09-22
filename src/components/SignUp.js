@@ -3,8 +3,6 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
 import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
@@ -13,13 +11,14 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { RequireAuth, useAuth } from '../contexts/Auth';
+import { Alert, AlertTitle } from '@mui/material';
 
 function Copyright(props) {
   return (
     <Typography variant="body2" color="text.secondary" align="center" {...props}>
       {'Copyright © '}
-      <Link color="inherit" href="https://mui.com/">
-        Your Website
+      <Link color="inherit" href="#">
+        FI-UBER
       </Link>{' '}
       {new Date().getFullYear()}
       {'.'}
@@ -31,16 +30,32 @@ const theme = createTheme();
 
 export default function SignUp() {
   let auth = useAuth();
+  let [errorMessage, setErrorMessage] = React.useState(null);
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      firstName: data.get("firstName"),
-      lastName: data.get("lastName"),
-      email: data.get("email"),
-      password: data.get("password")
-    });
+    const formData = new FormData(event.currentTarget);
+    let firstName = formData.get("firstName");
+    let lastName = formData.get("lastName");
+    let email = formData.get("email");
+    let password = formData.get("password");
+
+    try {
+      if (!firstName || !lastName || !email || !password) {
+        setErrorMessage("Please fill all required values.");
+      } else {
+        await auth.createUser(firstName, lastName, email, password);
+      }
+    } catch (error) {
+      if (error.code === "auth/email-already-in-use") {
+        setErrorMessage("Email already in use.");
+      } else if (error.code === "auth/weak-password") {
+        setErrorMessage("Password should be at least 6 characters long.");
+      } else {
+        setErrorMessage("An error has ocurred.");
+        console.log(error);
+      }
+    }
   };
 
   return (
@@ -106,12 +121,6 @@ export default function SignUp() {
                     autoComplete="new-password"
                   />
                 </Grid>
-                <Grid item xs={12}>
-                  <FormControlLabel
-                    control={<Checkbox value="allowExtraEmails" color="primary" />}
-                    label="I want to receive inspiration, marketing promotions and updates via email."
-                  />
-                </Grid>
               </Grid>
               <Button
                 type="submit"
@@ -121,15 +130,12 @@ export default function SignUp() {
               >
                 Sign Up
               </Button>
-              <Grid container justifyContent="flex-end">
-                <Grid item>
-                  <Link href="#" variant="body2">
-                    Already have an account? Sign in
-                  </Link>
-                </Grid>
-              </Grid>
             </Box>
           </Box>
+          {errorMessage &&
+          <Alert severity="error" sx={{marginTop: '1rem'}}>
+            <AlertTitle>{ errorMessage }</AlertTitle>
+          </Alert>}
           <Copyright sx={{ mt: 5 }} />
         </Container>
       </ThemeProvider>
