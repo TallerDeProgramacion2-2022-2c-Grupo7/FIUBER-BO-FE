@@ -51,9 +51,11 @@ export default function SignUp() {
       }
     } catch (error) {
       if (error.code === "auth/email-already-in-use") {
-        setErrorMessage("Email already in use.");
+        setErrorMessage("Email address already in use.");
       } else if (error.code === "auth/weak-password") {
         setErrorMessage("Password should be at least 6 characters long.");
+      } else if (error.code === "auth/invalid-email") {
+        setErrorMessage("Invalid email address.");
       } else {
         setErrorMessage("An error has ocurred.");
         console.log(error);

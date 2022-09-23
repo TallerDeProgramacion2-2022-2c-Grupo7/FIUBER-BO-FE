@@ -9,7 +9,7 @@ import Title from './Title';
 const rows = [
 ];
 
-export default function Orders() {
+export default function Trips() {
   return (
     <React.Fragment>
       <Title>Recent trips</Title>
