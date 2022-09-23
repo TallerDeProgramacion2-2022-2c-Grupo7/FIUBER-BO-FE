@@ -46,7 +46,7 @@ export default function LogIn() {
 
     let formData = new FormData(event.currentTarget);
     let email = formData.get("email");
-    let password = formData.get("password")
+    let password = formData.get("password");
 
     try {
       if (!email && !password) {
