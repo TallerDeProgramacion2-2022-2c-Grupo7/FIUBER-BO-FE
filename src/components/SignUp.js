@@ -37,16 +37,14 @@ export default function SignUp() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
-    let firstName = formData.get("firstName");
-    let lastName = formData.get("lastName");
     let email = formData.get("email");
     let password = formData.get("password");
 
     try {
-      if (!firstName || !lastName || !email || !password) {
+      if (!email || !password) {
         setErrorMessage("Please fill all required values.");
       } else {
-        await auth.createUser(firstName, lastName, email, password);
+        await auth.createUser(email, password);
         navigate("/dashboard", { replace: true, state: { adminRegistered: true } });
       }
     } catch (error) {
@@ -87,7 +85,7 @@ export default function SignUp() {
             </Typography>
             <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
               <Grid container spacing={2}>
-                <Grid item xs={12} sm={6}>
+                {/* <Grid item xs={12} sm={6}>
                   <TextField
                     autoComplete="given-name"
                     name="firstName"
@@ -107,7 +105,7 @@ export default function SignUp() {
                     name="lastName"
                     autoComplete="family-name"
                   />
-                </Grid>
+                </Grid> */}
                 <Grid item xs={12}>
                   <TextField
                     required
