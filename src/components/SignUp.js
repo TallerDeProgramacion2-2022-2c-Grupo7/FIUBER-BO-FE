@@ -40,27 +40,22 @@ export default function SignUp() {
     let email = formData.get("email");
     let password = formData.get("password");
 
-    try {
-      if (!email || !password) {
-        setErrorMessage("Please fill all required values.");
-      } else {
+    if (!email && !password) {
+      setErrorMessage("Email and password are required.");
+    } else if (!email) {
+      setErrorMessage("Email addres is required.");
+    } else if (!password) {
+      setErrorMessage("Password is required.");
+    } else {
+      try {
         await auth.createUser(email, password);
         navigate("/dashboard", { replace: true, state: { adminRegistered: true } });
-      }
-    } catch (error) {
-      if (error.code === "auth/email-already-in-use") {
-        setErrorMessage("Email address already in use.");
-      } else if (error.code === "auth/weak-password") {
-        setErrorMessage("Password should be at least 6 characters long.");
-      } else if (error.code === "auth/invalid-email") {
-        setErrorMessage("Invalid email address.");
-      } else {
-        setErrorMessage("An error has ocurred.");
-        console.log(error);
+      } catch(error) {
+        setErrorMessage(error.message || "An error has ocurred.")
       }
     }
   };
-  
+
   return (
     <RequireAuth>
       <ThemeProvider theme={theme}>
@@ -85,27 +80,6 @@ export default function SignUp() {
             </Typography>
             <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
               <Grid container spacing={2}>
-                {/* <Grid item xs={12} sm={6}>
-                  <TextField
-                    autoComplete="given-name"
-                    name="firstName"
-                    required
-                    fullWidth
-                    id="firstName"
-                    label="First Name"
-                    autoFocus
-                  />
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                  <TextField
-                    required
-                    fullWidth
-                    id="lastName"
-                    label="Last Name"
-                    name="lastName"
-                    autoComplete="family-name"
-                  />
-                </Grid> */}
                 <Grid item xs={12}>
                   <TextField
                     required
