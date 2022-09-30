@@ -14,8 +14,6 @@ import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
-import Chart from './Chart';
-import Orders from './Trips';
 import { RequireAuth, useAuth } from "../contexts/Auth";
 import { Alert, Button, Snackbar } from '@mui/material';
 import ListItemButton from '@mui/material/ListItemButton';
@@ -26,6 +24,8 @@ import BarChartIcon from '@mui/icons-material/BarChart';
 import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
 import { useLocation, useNavigate } from "react-router-dom";
 import Copyright from './common/Copyright';
+import CommonTable from "./common/Table.js";
+import Chart from './common/Chart';
 
 const drawerWidth = 240;
 
@@ -73,6 +73,44 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
   }),
 );
 
+const headers = [
+  "Date",
+  "User",
+  "Payment Method",
+  "Payment Amount"
+];
+
+const rows = [
+  {id: 1, fields: ["2022-09-29", "User1", "Credit card", "$1000"]}
+];
+
+function createData(time, amount) {
+  return { time, amount };
+}
+
+const data = [
+  createData('00:00', 0),
+  createData('03:00', 300),
+  createData('06:00', 600),
+  createData('09:00', 800),
+  createData('12:00', 1500),
+  createData('15:00', 2000),
+  createData('18:00', 2400),
+  createData('21:00', 2400),
+  createData('24:00', undefined),
+];
+
+function Trips() {
+  return (
+    <React.Fragment>
+      <CommonTable
+        title={"Recent tips"}
+        headers={headers}
+        rows={rows}
+      />
+    </React.Fragment>
+  );
+}
 
 const mdTheme = createTheme();
 
@@ -131,11 +169,7 @@ function DashboardContent() {
       <Box sx={{ display: 'flex' }}>
         <CssBaseline />
         <AppBar position="absolute" open={open}>
-          <Toolbar
-            sx={{
-              pr: '24px', // keep right padding when drawer closed
-            }}
-          >
+          <Toolbar sx={{ pr: '24px'}}>
             <IconButton
               edge="start"
               color="inherit"
@@ -195,7 +229,6 @@ function DashboardContent() {
           <Toolbar />
           <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
             <Grid container spacing={3}>
-              {/* Chart */}
               <Grid item xs={12}>
                 <Paper
                   sx={{
@@ -205,13 +238,12 @@ function DashboardContent() {
                     height: 240,
                   }}
                 >
-                  <Chart />
+                  <Chart data={data} />
                 </Paper>
               </Grid>
-              {/* Recent Trips */}
               <Grid item xs={12}>
                 <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
-                  <Orders />
+                  <Trips />
                 </Paper>
               </Grid>
             </Grid>
