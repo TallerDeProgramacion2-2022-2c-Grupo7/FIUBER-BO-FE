@@ -18,19 +18,7 @@ import {
 } from "react-router-dom";
 import { useAuth } from "../contexts/Auth";
 import { Alert, AlertTitle } from '@mui/material';
-
-function Copyright(props) {
-  return (
-    <Typography variant="body2" color="text.secondary" align="center" {...props}>
-      {'Copyright © '}
-      <Link color="inherit" href="#">
-        FI-UBER
-      </Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
-    </Typography>
-  );
-}
+import Copyright from './common/Copyright';
 
 const theme = createTheme();
 

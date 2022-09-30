@@ -5,7 +5,8 @@ import {
   useNavigate,
 } from "react-router-dom";
 import { initializeApp } from "firebase/app";
-import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut } from "firebase/auth";
+import { getAuth, signInWithEmailAndPassword, signOut } from "firebase/auth";
+import { getFunctions, httpsCallable } from "firebase/functions";
 
 const firebaseConfig = {
   apiKey: "AIzaSyA5_ujrP3dxsFWTgOgqLag8Wi8ubHUtcME",
@@ -21,6 +22,8 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const AuthContext = React.createContext();
 const useAuth = () => React.useContext(AuthContext);
+const functions = getFunctions(app);
+const createAdmin = httpsCallable(functions, "createAdmin");
 
 function AuthProvider({ children }) {
   let [user, setUser] = React.useState(null);
@@ -37,11 +40,8 @@ function AuthProvider({ children }) {
     navigate("/", { replace: true });
   };
 
-  let createUser = async (firstName, lastName, email, password) => {
-    console.log({ firstName, lastName, email, password });
-    window.auth = auth;
-    const response = await createUserWithEmailAndPassword(auth, email, password);
-    window.firebase_response = response;
+  let createUser = async (email, password) => {
+    await createAdmin({ email, password });
   };
 
   let value = { user, login, logout, createUser };
