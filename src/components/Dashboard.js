@@ -137,7 +137,7 @@ function DashboardContent() {
         </ListItemIcon>
         <ListItemText primary="Reports" />
       </ListItemButton>
-      <ListItemButton>
+      <ListItemButton onClick={() => navigate("/users", { replace: true })}>
         <ListItemIcon>
           <PeopleIcon />
         </ListItemIcon>

@@ -44,7 +44,21 @@ function AuthProvider({ children }) {
     await createAdmin({ email, password });
   };
 
-  let value = { user, login, logout, createUser };
+  let listUsers = async (params) => {
+    let response = await fetch(process.env.REACT_APP_USERS_URL + "?" + new URLSearchParams(params), {
+      method: "GET",      
+      headers: new Headers({
+        "Authorization": `Bearer ${user.accessToken}`
+      })
+    });
+    let data = await response.json();
+    if (!response.ok) {
+      throw new Error(data["detail"])
+    }
+    return data["result"];
+  };
+
+  let value = { user, login, logout, createUser, listUsers };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
