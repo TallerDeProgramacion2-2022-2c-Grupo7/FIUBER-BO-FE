@@ -10,12 +10,12 @@ export default function CommonTable({ title, headers, rows }) {
   const getTableRow = (row) => (
     <TableRow key={row.id}>
       {row.fields.map((field) => (
-        <TableCell>{field}</TableCell>  
+        <TableCell>{field}</TableCell>
       ))}
     </TableRow>
   );
   return (
-    <React.Fragment>
+    <>
       <Title>{title}</Title>
       <Table size="small">
         <TableHead>
@@ -29,6 +29,6 @@ export default function CommonTable({ title, headers, rows }) {
           {rows.map((row) => getTableRow(row))}
         </TableBody>
       </Table>
-    </React.Fragment>
+    </>
   );
 }
