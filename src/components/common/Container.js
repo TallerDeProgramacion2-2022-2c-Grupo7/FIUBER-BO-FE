@@ -14,7 +14,7 @@ import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
-import { RequireAuth, useAuth } from "../contexts/Auth";
+import { RequireAuth, useAuth } from "../../contexts/Auth";
 import { Alert, Button, Snackbar } from '@mui/material';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
@@ -23,10 +23,10 @@ import PeopleIcon from '@mui/icons-material/People';
 import BarChartIcon from '@mui/icons-material/BarChart';
 import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
 import { useLocation, useNavigate } from "react-router-dom";
-import Copyright from './common/Copyright';
-import CommonTable from "./common/Table.js";
-import Chart from './common/Chart';
-import CommonContainer from './common/Container';
+import Copyright from './Copyright';
+import CommonTable from "./Table.js";
+import Chart from './Chart';
+
 const drawerWidth = 240;
 
 const AppBar = styled(MuiAppBar, {
@@ -114,7 +114,7 @@ function Trips() {
 
 const mdTheme = createTheme();
 
-function DashboardContent() {
+function DashboardContent({ children }) {
   const [open, setOpen] = React.useState(true);
   const [snackbarOpen, setSnackbarOpen] = React.useState(true);
   const toggleDrawer = () => {
@@ -131,11 +131,11 @@ function DashboardContent() {
 
   const mainListItems = (
     <React.Fragment>
-      <ListItemButton>
+      <ListItemButton onClick={() => navigate("/dashboard", { replace: true })}>
         <ListItemIcon>
           <BarChartIcon />
         </ListItemIcon>
-        <ListItemText primary="Reports" />
+        <ListItemText primary="Dashboard" />
       </ListItemButton>
       <ListItemButton onClick={() => navigate("/users", { replace: true })}>
         <ListItemIcon>
@@ -189,7 +189,7 @@ function DashboardContent() {
               noWrap
               sx={{ flexGrow: 1 }}
             >
-              Dashboard
+              FIUBER Backoffice
             </Typography>
             <Button color="inherit" onClick={signOutHandler}>
               Sign out
@@ -228,20 +228,7 @@ function DashboardContent() {
         >
           <Toolbar />
           <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-            
-            <Copyright sx={{ pt: 4 }} />
-          </Container>
-        </Box>
-      </Box>
-    </ThemeProvider>
-  );
-}
-
-export default function Dashboard() {
-  return (
-    <RequireAuth>
-      <CommonContainer>
-      <Grid container spacing={3}>
+            {/* <Grid container spacing={3}>
               <Grid item xs={12}>
                 <Paper
                   sx={{
@@ -256,11 +243,17 @@ export default function Dashboard() {
               </Grid>
               <Grid item xs={12}>
                 <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
-                  <Trips />
+                  {children}
                 </Paper>
               </Grid>
-            </Grid>
-      </CommonContainer>
-    </RequireAuth>
+            </Grid> */}
+            {children}
+            <Copyright sx={{ pt: 4 }} />
+          </Container>
+        </Box>
+      </Box>
+    </ThemeProvider>
   );
 }
+
+export default DashboardContent;

@@ -5,6 +5,8 @@ import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
+import Paper from '@mui/material/Paper';
+import Chart from './common/Chart';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
@@ -13,6 +15,7 @@ import { RequireAuth, useAuth } from '../contexts/Auth';
 import { Alert, AlertTitle } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import Copyright from './common/Copyright';
+import CommonContainer from "./common/Container";
 
 const theme = createTheme();
 
@@ -45,67 +48,76 @@ export default function SignUp() {
 
   return (
     <RequireAuth>
+      <CommonContainer>
       <ThemeProvider theme={theme}>
-        <Button onClick={() => navigate("/dashboard", { replace: true })} variant="outlined" sx={{ mt: '.75rem', ml: '.75rem' }}>
+        {/* <Button onClick={() => navigate("/dashboard", { replace: true })} variant="outlined" sx={{ mt: '.75rem', ml: '.75rem' }}>
           Go to dashboard
-        </Button>
+        </Button> */}
         <Container component="main" maxWidth="xs">
-          <CssBaseline />
-          <Box
-            sx={{
-              marginTop: 8,
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-            }}
-          >
-            <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
-              <LockOutlinedIcon />
-            </Avatar>
-            <Typography component="h1" variant="h5">
-              Administrator Sign up
-            </Typography>
-            <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
-              <Grid container spacing={2}>
-                <Grid item xs={12}>
-                  <TextField
-                    required
-                    fullWidth
-                    id="email"
-                    label="Email Address"
-                    name="email"
-                    autoComplete="email"
-                  />
+        <Grid container spacing={3}>
+              
+              <Grid item xs={12}>
+                <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
+                <CssBaseline />
+            <Box
+              sx={{
+                marginTop: 0,
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+              }}
+            >
+              <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+                <LockOutlinedIcon />
+              </Avatar>
+              <Typography component="h1" variant="h5">
+                Administrator Sign up
+              </Typography>
+              <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
+                <Grid container spacing={2}>
+                  <Grid item xs={12}>
+                    <TextField
+                      required
+                      fullWidth
+                      id="email"
+                      label="Email Address"
+                      name="email"
+                      autoComplete="email"
+                    />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <TextField
+                      required
+                      fullWidth
+                      name="password"
+                      label="Password"
+                      type="password"
+                      id="password"
+                      autoComplete="new-password"
+                    />
+                  </Grid>
                 </Grid>
-                <Grid item xs={12}>
-                  <TextField
-                    required
-                    fullWidth
-                    name="password"
-                    label="Password"
-                    type="password"
-                    id="password"
-                    autoComplete="new-password"
-                  />
-                </Grid>
-              </Grid>
-              <Button
-                type="submit"
-                fullWidth
-                variant="contained"
-                sx={{ mt: 3, mb: 2 }}
-              >
-                Sign Up
-              </Button>
+                <Button
+                  type="submit"
+                  fullWidth
+                  variant="contained"
+                  sx={{ mt: 3, mb: 2 }}
+                >
+                  Sign Up
+                </Button>
+              </Box>
             </Box>
-          </Box>
-          {errorMessage &&
-          <Alert severity="error" sx={{marginTop: '1rem'}}>
-            <AlertTitle>{ errorMessage }</AlertTitle>
-          </Alert>}
-          <Copyright sx={{ mt: 5 }} />
+            {errorMessage &&
+            <Alert severity="error" sx={{marginTop: '1rem'}}>
+              <AlertTitle>{ errorMessage }</AlertTitle>
+            </Alert>}
+                </Paper>
+              </Grid>
+            </Grid>
+            
         </Container>
       </ThemeProvider>
+      </CommonContainer>
     </RequireAuth>
   );
 }

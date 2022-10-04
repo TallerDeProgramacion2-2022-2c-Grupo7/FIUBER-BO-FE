@@ -1,8 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { RequireAuth, useAuth } from "../contexts/Auth";
+import Grid from '@mui/material/Grid';
+import Paper from '@mui/material/Paper';
 import CommonTable from "./common/Table";
+import Container from "./common/Container";
 
-export default function Users() {
+export default function UsersContent() {
   let auth = useAuth();
   let [usersList, setUsersList] = useState([]);
 
@@ -36,11 +39,19 @@ export default function Users() {
 
   return (
     <RequireAuth>
-      <CommonTable
-        title="Users"
-        headers={["User ID", "Email Address", "Status", "Type"]}
-        rows={getRows()}
-      />
+      <Container>
+      <Grid container spacing={3}>
+        <Grid item xs={12}>
+          <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
+            <CommonTable
+              title="Users"
+              headers={["User ID", "Email Address", "Status", "Type"]}
+              rows={getRows()}
+            />
+          </Paper>
+        </Grid>
+      </Grid>
+      </Container>
     </RequireAuth>
   );
 }
