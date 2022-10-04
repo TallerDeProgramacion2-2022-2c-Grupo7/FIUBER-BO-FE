@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import * as React from 'react';
 import { styled, createTheme, ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -10,11 +11,8 @@ import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
 import Container from '@mui/material/Container';
-import Grid from '@mui/material/Grid';
-import Paper from '@mui/material/Paper';
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
-import { RequireAuth, useAuth } from "../../contexts/Auth";
 import { Alert, Button, Snackbar } from '@mui/material';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
@@ -22,10 +20,9 @@ import ListItemText from '@mui/material/ListItemText';
 import PeopleIcon from '@mui/icons-material/People';
 import BarChartIcon from '@mui/icons-material/BarChart';
 import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from 'react-router-dom';
+import { useAuth } from '../../contexts/Auth';
 import Copyright from './Copyright';
-import CommonTable from "./Table.js";
-import Chart from './Chart';
 
 const drawerWidth = 240;
 
@@ -73,45 +70,6 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
   }),
 );
 
-const headers = [
-  "Date",
-  "User",
-  "Payment Method",
-  "Payment Amount"
-];
-
-const rows = [
-  {id: 1, fields: ["2022-09-29", "User1", "Credit card", "$1000"]}
-];
-
-function createData(time, amount) {
-  return { time, amount };
-}
-
-const data = [
-  createData('00:00', 0),
-  createData('03:00', 300),
-  createData('06:00', 600),
-  createData('09:00', 800),
-  createData('12:00', 1500),
-  createData('15:00', 2000),
-  createData('18:00', 2400),
-  createData('21:00', 2400),
-  createData('24:00', undefined),
-];
-
-function Trips() {
-  return (
-    <React.Fragment>
-      <CommonTable
-        title={"Recent tips"}
-        headers={headers}
-        rows={rows}
-      />
-    </React.Fragment>
-  );
-}
-
 const mdTheme = createTheme();
 
 function DashboardContent({ children }) {
@@ -120,56 +78,58 @@ function DashboardContent({ children }) {
   const toggleDrawer = () => {
     setOpen(!open);
   };
-  let navigate = useNavigate();
-  let location = useLocation();
-  let adminRegistered = location.state?.adminRegistered;
-  let auth = useAuth();
-  let signOutHandler = async (event) => {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const adminRegistered = location.state?.adminRegistered;
+  const auth = useAuth();
+  const signOutHandler = async (event) => {
     event.preventDefault();
     await auth.logout();
   };
 
   const mainListItems = (
-    <React.Fragment>
-      <ListItemButton onClick={() => navigate("/dashboard", { replace: true })}>
+    <>
+      <ListItemButton onClick={() => navigate('/dashboard', { replace: true })}>
         <ListItemIcon>
           <BarChartIcon />
         </ListItemIcon>
         <ListItemText primary="Dashboard" />
       </ListItemButton>
-      <ListItemButton onClick={() => navigate("/users", { replace: true })}>
+      <ListItemButton onClick={() => navigate('/users', { replace: true })}>
         <ListItemIcon>
           <PeopleIcon />
         </ListItemIcon>
         <ListItemText primary="Users" />
       </ListItemButton>
-      <ListItemButton onClick={() => navigate("/signup", { replace: true })}>
+      <ListItemButton onClick={() => navigate('/signup', { replace: true })}>
         <ListItemIcon>
           <AdminPanelSettingsIcon />
         </ListItemIcon>
         <ListItemText primary="Administrators" />
       </ListItemButton>
-    </React.Fragment>
+    </>
   );
 
   return (
     <ThemeProvider theme={mdTheme}>
-      {adminRegistered &&
+      {adminRegistered
+      && (
       <Snackbar
         open={snackbarOpen}
         onClose={() => setSnackbarOpen(false)}
         autoHideDuration={6000}
         action={() => {}}
-        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
       >
         <Alert onClose={() => setSnackbarOpen(false)} severity="success" sx={{ width: 400 }}>
           Administrator registered successfully
         </Alert>
-      </Snackbar>}
+      </Snackbar>
+      )}
       <Box sx={{ display: 'flex' }}>
         <CssBaseline />
         <AppBar position="absolute" open={open}>
-          <Toolbar sx={{ pr: '24px'}}>
+          <Toolbar sx={{ pr: '24px' }}>
             <IconButton
               edge="start"
               color="inherit"
@@ -217,10 +177,9 @@ function DashboardContent({ children }) {
         <Box
           component="main"
           sx={{
-            backgroundColor: (theme) =>
-              theme.palette.mode === 'light'
-                ? theme.palette.grey[100]
-                : theme.palette.grey[900],
+            backgroundColor: (theme) => (theme.palette.mode === 'light'
+              ? theme.palette.grey[100]
+              : theme.palette.grey[900]),
             flexGrow: 1,
             height: '100vh',
             overflow: 'auto',
@@ -228,25 +187,6 @@ function DashboardContent({ children }) {
         >
           <Toolbar />
           <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-            {/* <Grid container spacing={3}>
-              <Grid item xs={12}>
-                <Paper
-                  sx={{
-                    p: 2,
-                    display: 'flex',
-                    flexDirection: 'column',
-                    height: 240,
-                  }}
-                >
-                  <Chart data={data} />
-                </Paper>
-              </Grid>
-              <Grid item xs={12}>
-                <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
-                  {children}
-                </Paper>
-              </Grid>
-            </Grid> */}
             {children}
             <Copyright sx={{ pt: 4 }} />
           </Container>

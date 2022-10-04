@@ -1,3 +1,5 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
+/* eslint-disable react/jsx-no-bind */
 import React, { useState } from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
@@ -15,45 +17,44 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import {
   useNavigate,
   useLocation,
-} from "react-router-dom";
-import { useAuth } from "../contexts/Auth";
+} from 'react-router-dom';
 import { Alert, AlertTitle } from '@mui/material';
+import { useAuth } from '../contexts/Auth';
 import Copyright from './common/Copyright';
 
 const theme = createTheme();
 
 export default function LogIn() {
-  let navigate = useNavigate();
-  let location = useLocation();
-  let auth = useAuth();
-  let from = location.state?.from?.pathname || "/dashboard";
-  let [errorMessage, setErrorMessage] = useState(null);
+  const navigate = useNavigate();
+  const location = useLocation();
+  const auth = useAuth();
+  const from = location.state?.from?.pathname || '/dashboard';
+  const [errorMessage, setErrorMessage] = useState(null);
 
   async function handleSubmit(event) {
     event.preventDefault();
 
-    let formData = new FormData(event.currentTarget);
-    let email = formData.get("email");
-    let password = formData.get("password");
+    const formData = new FormData(event.currentTarget);
+    const email = formData.get('email');
+    const password = formData.get('password');
 
     try {
       if (!email && !password) {
-        setErrorMessage("Email and password are required.");
+        setErrorMessage('Email and password are required.');
       } else if (!email) {
-        setErrorMessage("Email addres is required.");
+        setErrorMessage('Email addres is required.');
       } else if (!password) {
-        setErrorMessage("Password is required.");
+        setErrorMessage('Password is required.');
       } else {
         await auth.login(email, password);
         navigate(from, { replace: true });
       }
     } catch (error) {
-      if (error.code === "auth/wrong-password"
-        || error.code === "auth/user-not-found") {
-        setErrorMessage("Incorrect email or password.");
+      if (error.code === 'auth/wrong-password'
+        || error.code === 'auth/user-not-found') {
+        setErrorMessage('Incorrect email or password.');
       } else {
-        setErrorMessage("An error has ocurred.");
-        console.log(error);
+        setErrorMessage('An error has ocurred.');
       }
     }
   }
@@ -70,8 +71,7 @@ export default function LogIn() {
           sx={{
             backgroundImage: 'url(https://wallpapercave.com/wp/wp2290778.jpg)',
             backgroundRepeat: 'no-repeat',
-            backgroundColor: (t) =>
-              t.palette.mode === 'light' ? t.palette.grey[50] : t.palette.grey[900],
+            backgroundColor: (t) => (t.palette.mode === 'light' ? t.palette.grey[50] : t.palette.grey[900]),
             backgroundSize: 'cover',
             backgroundPosition: 'center',
           }}
@@ -90,7 +90,7 @@ export default function LogIn() {
               <LockOutlinedIcon />
             </Avatar>
             <Typography component="h1" variant="h5">
-              Log in to FI-UBER's backoffice
+              Log in to FI-UBER&apos;s backoffice
             </Typography>
             <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 1 }}>
               <TextField
@@ -132,10 +132,12 @@ export default function LogIn() {
                   </Link>
                 </Grid>
               </Grid>
-              {errorMessage &&
-              <Alert severity="error" sx={{marginTop: '1rem'}}>
+              {errorMessage
+              && (
+              <Alert severity="error" sx={{ marginTop: '1rem' }}>
                 <AlertTitle>{ errorMessage }</AlertTitle>
-              </Alert>}
+              </Alert>
+              )}
               <Copyright sx={{ mt: 5 }} />
             </Box>
           </Box>
