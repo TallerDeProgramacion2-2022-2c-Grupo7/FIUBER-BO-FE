@@ -4,6 +4,7 @@ import Paper from '@mui/material/Paper';
 import { RequireAuth, useAuth } from '../contexts/Auth';
 import CommonTable from './common/Table';
 import Container from './common/Container';
+import PopUpMenu from './common/PopUpMenu';
 
 export default function UsersContent() {
   const auth = useAuth();
@@ -25,12 +26,23 @@ export default function UsersContent() {
     const rows = [];
     for (const user of usersList) {
       const row = {};
+      const options = [
+        {
+          text: 'View profile',
+          handler: async () => {},
+        },
+        {
+          text: 'Block',
+          handler: async () => {},
+        },
+      ];
       row.id = user.uid;
       row.fields = [
         user.uid,
         user.email,
         user.is_active === true ? 'Active' : 'Blocked',
         user.is_admin === true ? 'Admin' : 'User',
+        <PopUpMenu text="Actions" options={options} />,
       ];
       rows.push(row);
     }
@@ -45,7 +57,7 @@ export default function UsersContent() {
             <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
               <CommonTable
                 title="Users"
-                headers={['User ID', 'Email Address', 'Status', 'Type']}
+                headers={['User ID', 'Email Address', 'Status', 'Type', '']}
                 rows={getRows()}
               />
             </Paper>

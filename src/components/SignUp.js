@@ -48,9 +48,8 @@ export default function SignUp() {
     <RequireAuth>
       <CommonContainer>
         <ThemeProvider theme={theme}>
-          <Container component="main" maxWidth="xs">
+          <Container>
             <Grid container spacing={3}>
-
               <Grid item xs={12}>
                 <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
                   <CssBaseline />
@@ -100,18 +99,17 @@ export default function SignUp() {
                       >
                         Sign Up
                       </Button>
+                      {errorMessage
+                      && (
+                      <Alert severity="error" sx={{ marginTop: '1rem' }}>
+                        <AlertTitle>{ errorMessage }</AlertTitle>
+                      </Alert>
+                      )}
                     </Box>
                   </Box>
-                  {errorMessage
-            && (
-            <Alert severity="error" sx={{ marginTop: '1rem' }}>
-              <AlertTitle>{ errorMessage }</AlertTitle>
-            </Alert>
-            )}
                 </Paper>
               </Grid>
             </Grid>
-
           </Container>
         </ThemeProvider>
       </CommonContainer>
