@@ -10,7 +10,7 @@ export default function UsersContent() {
   const [usersList, setUsersList] = useState([]);
 
   const loadUsers = async () => {
-    const result = await auth.listUsers({ max_results: 100 });
+    const result = await auth.listUsers({ max_results: 1000 });
     window.result = result;
     setUsersList(result);
   };

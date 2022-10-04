@@ -26,12 +26,14 @@ const functions = getFunctions(app);
 const createAdmin = httpsCallable(functions, 'createAdmin');
 
 function AuthProvider({ children }) {
-  const [user, setUser] = React.useState(null);
+  const [user, setUser] = React.useState(JSON.parse(sessionStorage.getItem('user')));
   const navigate = useNavigate();
 
   const login = async (email, password) => {
     const response = await signInWithEmailAndPassword(auth, email, password);
-    return setUser(response.user);
+    const currentUser = response.user;
+    sessionStorage.setItem('user', JSON.stringify(currentUser));
+    return setUser(currentUser);
   };
 
   const logout = async () => {
@@ -48,7 +50,7 @@ function AuthProvider({ children }) {
     const response = await fetch(`${process.env.REACT_APP_USERS_URL}?${new URLSearchParams(params)}`, {
       method: 'GET',
       headers: new Headers({
-        Authorization: `Bearer ${user.accessToken}`,
+        Authorization: `Bearer ${user.stsTokenManager.accessToken}`,
       }),
     });
     const data = await response.json();
