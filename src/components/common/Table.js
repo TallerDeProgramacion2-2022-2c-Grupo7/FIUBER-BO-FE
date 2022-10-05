@@ -8,7 +8,7 @@ import Title from './Title';
 
 export default function CommonTable({ title, headers, rows }) {
   const getTableRow = (row) => (
-    <TableRow key={row.id}>
+    <TableRow key={row.id} hover>
       {row.fields.map((field) => (
         <TableCell>{field}</TableCell>
       ))}
