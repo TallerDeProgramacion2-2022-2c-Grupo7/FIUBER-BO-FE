@@ -53,6 +53,8 @@ export default function LogIn() {
       if (error.code === 'auth/wrong-password'
         || error.code === 'auth/user-not-found') {
         setErrorMessage('Incorrect email or password.');
+      } else if (error.code === 'auth/user-disabled') {
+        setErrorMessage('Your account is blocked.');
       } else {
         setErrorMessage('An error has ocurred.');
       }

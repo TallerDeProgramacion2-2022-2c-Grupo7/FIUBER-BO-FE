@@ -1,10 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import CancelIcon from '@mui/icons-material/Cancel';
+import { Link } from '@mui/material';
 import { RequireAuth, useAuth } from '../contexts/Auth';
 import CommonTable from './common/Table';
 import Container from './common/Container';
 import PopUpMenu from './common/PopUpMenu';
+// import DraggableDialog from './common/ConfirmDialog';
 
 export default function UsersContent() {
   const auth = useAuth();
@@ -33,14 +37,36 @@ export default function UsersContent() {
         },
         {
           text: 'Block',
-          handler: async () => {},
+          confirm: true,
+          handler: async () => {
+            await auth.blockUser(user.uid);
+            await loadUsers();
+          },
         },
       ];
       row.id = user.uid;
       row.fields = [
         user.uid,
-        user.email,
-        user.is_active === true ? 'Active' : 'Blocked',
+        <Link href={`mailto:${user.email}`} underline="none">{user.email}</Link>,
+        user.is_active === true ? (
+          <Grid container direction="row" alignItems="center">
+            <Grid item>
+              <CheckCircleIcon color="success" fontSize="small" sx={{ mb: -0.75, mr: '0.25rem' }} />
+            </Grid>
+            <Grid item>
+              Active
+            </Grid>
+          </Grid>
+        ) : (
+          <Grid container direction="row" alignItems="center">
+            <Grid item>
+              <CancelIcon color="error" fontSize="small" sx={{ mb: -0.75, mr: '0.25rem' }} />
+            </Grid>
+            <Grid item>
+              Blocked
+            </Grid>
+          </Grid>
+        ),
         user.is_admin === true ? 'Admin' : 'User',
         <PopUpMenu text="Actions" options={options} />,
       ];
