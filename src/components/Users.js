@@ -8,7 +8,6 @@ import { RequireAuth, useAuth } from '../contexts/Auth';
 import CommonTable from './common/Table';
 import Container from './common/Container';
 import PopUpMenu from './common/PopUpMenu';
-// import DraggableDialog from './common/ConfirmDialog';
 
 export default function UsersContent() {
   const auth = useAuth();
@@ -36,10 +35,12 @@ export default function UsersContent() {
           handler: async () => {},
         },
         {
-          text: 'Block',
+          text: user.is_active ? 'Block' : 'Unblock',
           confirm: true,
+          popUpTitle: `Are you sure you want to ${user.is_active ? 'block' : 'unblock'} this user?`,
+          popUpDetail: user.is_active ? 'The user will not be able to sign in until it is unblocked.' : 'The user will be able to use the app again.',
           handler: async () => {
-            await auth.blockUser(user.uid);
+            await auth.setUserStatus(user.uid, !user.is_active);
             await loadUsers();
           },
         },

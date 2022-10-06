@@ -26,9 +26,9 @@ export default function PopUpMenu({ options }) {
               <MenuItem onClick={() => onClickHandler(popupState, option.confirm, option.handler)}>
                 {option.confirm ? (
                   <DraggableDialog
-                    text="Block"
-                    title="Are you sure you want to block this user?"
-                    detail="The user won't be able to sign in until it's unblocked."
+                    text={option.text}
+                    title={option.popUpTitle}
+                    detail={option.popUpDetail}
                     confirmHandler={option.handler}
                   />
                 ) : option.text}
