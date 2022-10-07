@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
@@ -10,6 +11,7 @@ import Container from './common/Container';
 import PopUpMenu from './common/PopUpMenu';
 
 export default function UsersContent() {
+  const navigate = useNavigate();
   const auth = useAuth();
   const [usersList, setUsersList] = useState([]);
 
@@ -32,7 +34,10 @@ export default function UsersContent() {
       const options = [
         {
           text: 'View profile',
-          handler: async () => {},
+          handler: async () => {
+            const userInfo = await auth.getUser(user.uid);
+            navigate('/profile', { replace: true, state: { user: userInfo } });
+          },
         },
         {
           text: user.is_active ? 'Block' : 'Unblock',

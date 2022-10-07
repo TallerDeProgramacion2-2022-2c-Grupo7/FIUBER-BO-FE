@@ -5,6 +5,7 @@ import LogIn from './components/LogIn';
 import Dashboard from './components/Dashboard';
 import SignUp from './components/SignUp';
 import Users from './components/Users';
+import Profile from './components/Profile';
 
 export default function App() {
   return (
@@ -14,6 +15,7 @@ export default function App() {
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/users" element={<Users />} />
         <Route path="/signup" element={<SignUp />} />
+        <Route path="/profile" element={<Profile />} />
       </Routes>
     </AuthProvider>
   );

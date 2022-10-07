@@ -60,6 +60,20 @@ function AuthProvider({ children }) {
     return data.result;
   };
 
+  const getUser = async (uid) => {
+    const response = await fetch(`${process.env.REACT_APP_USERS_URL}/${uid}`, {
+      method: 'GET',
+      headers: new Headers({
+        Authorization: `Bearer ${user.stsTokenManager.accessToken}`,
+      }),
+    });
+    const data = await response.json();
+    if (!response.ok) {
+      throw new Error(data.detail);
+    }
+    return data.result;
+  };
+
   const setUserStatus = async (uid, status) => {
     const response = await fetch(`${process.env.REACT_APP_USERS_URL}/${uid}?active=${status}`, {
       method: 'PATCH',
@@ -75,7 +89,7 @@ function AuthProvider({ children }) {
   };
 
   const value = {
-    user, login, logout, createUser, listUsers, setUserStatus,
+    user, login, logout, createUser, listUsers, setUserStatus, getUser,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
