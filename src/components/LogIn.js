@@ -18,7 +18,7 @@ import {
   useNavigate,
   useLocation,
 } from 'react-router-dom';
-import { Alert, AlertTitle } from '@mui/material';
+import { Alert, AlertTitle, Snackbar } from '@mui/material';
 import { useAuth } from '../contexts/Auth';
 import Copyright from './common/Copyright';
 
@@ -30,6 +30,8 @@ export default function LogIn() {
   const auth = useAuth();
   const from = location.state?.from?.pathname || '/dashboard';
   const [errorMessage, setErrorMessage] = useState(null);
+  const [snackbarOpen, setSnackbarOpen] = useState(true);
+  const message = location.state?.message;
 
   async function handleSubmit(event) {
     event.preventDefault();
@@ -67,6 +69,20 @@ export default function LogIn() {
 
   return (
     <ThemeProvider theme={theme}>
+      {message
+      && (
+      <Snackbar
+        open={snackbarOpen}
+        onClose={() => setSnackbarOpen(false)}
+        autoHideDuration={6000}
+        action={() => {}}
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+      >
+        <Alert onClose={() => setSnackbarOpen(false)} severity="success" sx={{ width: 400 }}>
+          {message}
+        </Alert>
+      </Snackbar>
+      )}
       <Grid container component="main" sx={{ height: '100vh' }}>
         <CssBaseline />
         <Grid
@@ -133,7 +149,7 @@ export default function LogIn() {
               </Button>
               <Grid container>
                 <Grid item xs>
-                  <Link href="#" variant="body2">
+                  <Link href="/resetPassword" variant="body2">
                     Forgot password?
                   </Link>
                 </Grid>

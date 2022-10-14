@@ -5,7 +5,12 @@ import {
   useNavigate,
 } from 'react-router-dom';
 import { initializeApp } from 'firebase/app';
-import { getAuth, signInWithEmailAndPassword, signOut } from 'firebase/auth';
+import {
+  getAuth,
+  signInWithEmailAndPassword,
+  signOut,
+  sendPasswordResetEmail,
+} from 'firebase/auth';
 import { getFunctions, httpsCallable } from 'firebase/functions';
 
 const firebaseConfig = {
@@ -88,8 +93,12 @@ function AuthProvider({ children }) {
     }
   };
 
+  const sendPasswordReset = async (email) => {
+    await sendPasswordResetEmail(auth, email);
+  };
+
   const value = {
-    user, login, logout, createUser, listUsers, setUserStatus, getUser,
+    user, login, logout, createUser, listUsers, setUserStatus, getUser, sendPasswordReset,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
