@@ -1,29 +1,28 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
-import CancelIcon from '@mui/icons-material/Cancel';
-import { Link } from '@mui/material';
 import { RequireAuth, useAuth } from '../contexts/Auth';
 import CommonTable from './common/Table';
 import Container from './common/Container';
 import PopUpMenu from './common/PopUpMenu';
+import StatusText from './common/StatusText';
+import EmailLink from './common/EmailLink';
 
 export default function UsersContent() {
+  const navigate = useNavigate();
   const auth = useAuth();
   const [usersList, setUsersList] = useState([]);
 
   const loadUsers = async () => {
     const result = await auth.listUsers({ max_results: 1000 });
-    window.result = result;
     setUsersList(result);
   };
 
   useEffect(() => {
-    if (usersList.length === 0) {
-      loadUsers();
-    }
-  });
+    document.title = 'Users - FIUBER Backoffice';
+    loadUsers();
+  }, []);
 
   const getRows = () => {
     const rows = [];
@@ -32,7 +31,10 @@ export default function UsersContent() {
       const options = [
         {
           text: 'View profile',
-          handler: async () => {},
+          handler: async () => {
+            const userInfo = await auth.getUser(user.uid);
+            navigate('/profile', { replace: true, state: { user: userInfo } });
+          },
         },
         {
           text: user.is_active ? 'Block' : 'Unblock',
@@ -48,26 +50,8 @@ export default function UsersContent() {
       row.id = user.uid;
       row.fields = [
         user.uid,
-        <Link href={`mailto:${user.email}`} underline="none">{user.email}</Link>,
-        user.is_active === true ? (
-          <Grid container direction="row" alignItems="center">
-            <Grid item>
-              <CheckCircleIcon color="success" fontSize="small" sx={{ mb: -0.75, mr: '0.25rem' }} />
-            </Grid>
-            <Grid item>
-              Active
-            </Grid>
-          </Grid>
-        ) : (
-          <Grid container direction="row" alignItems="center">
-            <Grid item>
-              <CancelIcon color="error" fontSize="small" sx={{ mb: -0.75, mr: '0.25rem' }} />
-            </Grid>
-            <Grid item>
-              Blocked
-            </Grid>
-          </Grid>
-        ),
+        <EmailLink emailAddress={user.email} />,
+        <StatusText active={user.is_active} />,
         user.is_admin === true ? 'Admin' : 'User',
         <PopUpMenu text="Actions" options={options} />,
       ];

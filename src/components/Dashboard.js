@@ -44,6 +44,9 @@ function Trips() {
 }
 
 export default function Dashboard() {
+  React.useEffect(() => {
+    document.title = 'Dashboard - FIUBER Backoffice';
+  }, []);
   return (
     <RequireAuth>
       <CommonContainer>

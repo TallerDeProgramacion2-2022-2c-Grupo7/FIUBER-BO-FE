@@ -44,6 +44,10 @@ export default function SignUp() {
     }
   };
 
+  React.useEffect(() => {
+    document.title = 'Administrator sign-up - FIUBER Backoffice';
+  }, []);
+
   return (
     <RequireAuth>
       <CommonContainer>
