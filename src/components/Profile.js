@@ -1,8 +1,6 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
-import {
-  Grid, Paper, Typography,
-} from '@mui/material';
+import { Grid, Paper, Typography } from '@mui/material';
 import { RequireAuth } from '../contexts/Auth';
 import Container from './common/Container';
 import CommonTable from './common/Table';
@@ -12,6 +10,9 @@ import EmailLink from './common/EmailLink';
 export default function Profile() {
   const location = useLocation();
   const user = location.state?.user;
+  useEffect(() => {
+    document.title = 'User profile - FIUBER Backoffice';
+  }, []);
   return (
     <RequireAuth>
       <Container>

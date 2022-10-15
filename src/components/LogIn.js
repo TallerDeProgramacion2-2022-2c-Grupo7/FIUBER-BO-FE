@@ -61,6 +61,10 @@ export default function LogIn() {
     }
   }
 
+  React.useEffect(() => {
+    document.title = 'FIUBER Backoffice';
+  }, []);
+
   return (
     <ThemeProvider theme={theme}>
       <Grid container component="main" sx={{ height: '100vh' }}>

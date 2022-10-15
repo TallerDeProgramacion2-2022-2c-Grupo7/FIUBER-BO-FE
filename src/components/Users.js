@@ -17,15 +17,13 @@ export default function UsersContent() {
 
   const loadUsers = async () => {
     const result = await auth.listUsers({ max_results: 1000 });
-    window.result = result;
     setUsersList(result);
   };
 
   useEffect(() => {
-    if (usersList.length === 0) {
-      loadUsers();
-    }
-  });
+    document.title = 'Users - FIUBER Backoffice';
+    loadUsers();
+  }, []);
 
   const getRows = () => {
     const rows = [];
