@@ -15,9 +15,11 @@ const headers = [
 ];
 
 const rows = [
-  { id: 1, fields: ['2022-10-17 19:05:59', 'dQt7Lkn8JpOI1SHa45qKqsXUwI', 'Login'] },
-  { id: 1, fields: ['2022-10-17 19:05:23', 'dQt7Lkn8JpOI1SHa45qKqsXUwI', 'Signup'] },
-  { id: 1, fields: ['2022-10-17 19:04:12', 'dQt7Lkn8JpOI1SHa45qKq7lzHG', 'Login'] },
+  { id: 1, fields: ['2022-10-17 19:05:59', '789789789', 'Login'] },
+  { id: 1, fields: ['2022-10-17 19:05:23', '789789789', 'Signup'] },
+  { id: 1, fields: ['2022-10-17 19:04:12', '456456456', 'Login'] },
+  { id: 1, fields: ['2022-10-17 19:02:25', '123123123', 'Login'] },
+  { id: 1, fields: ['2022-10-17 19:01:04', '123123123', 'Password reset'] },
 ];
 
 function createData(time, amount) {
@@ -25,6 +27,13 @@ function createData(time, amount) {
 }
 
 const data = [
+  createData('10-10', 2),
+  createData('10-11', 5),
+  createData('10-12', 8),
+  createData('10-13', 3),
+  createData('10-14', 4),
+  createData('10-15', 1),
+  createData('10-16', 4),
   createData('10-17', 2),
   createData('10-18', 5),
   createData('10-19', 8),
@@ -32,6 +41,7 @@ const data = [
   createData('10-21', 4),
   createData('10-22', 1),
   createData('10-23', 4),
+  createData('10-24', 2),
 ];
 
 function Trips() {
@@ -58,7 +68,7 @@ export default function Dashboard() {
                 p: 2,
                 display: 'flex',
                 flexDirection: 'column',
-                height: 240,
+                height: 300,
               }}
             >
               <Chart data={data} />
@@ -70,7 +80,7 @@ export default function Dashboard() {
                 p: 2,
                 display: 'flex',
                 flexDirection: 'column',
-                height: 240,
+                height: 300,
               }}
             >
               <>
@@ -78,8 +88,11 @@ export default function Dashboard() {
                 <Typography component="p" variant="h4">
                   10
                 </Typography>
-                <br />
                 <Title>Total blocked users</Title>
+                <Typography component="p" variant="h4">
+                  2
+                </Typography>
+                <Title>Total admins</Title>
                 <Typography component="p" variant="h4">
                   2
                 </Typography>
