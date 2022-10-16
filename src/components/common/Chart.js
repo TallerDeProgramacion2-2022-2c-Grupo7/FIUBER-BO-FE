@@ -10,7 +10,7 @@ export default function Chart({ data }) {
 
   return (
     <>
-      <Title>Metrics</Title>
+      <Title>Last 15 days</Title>
       <ResponsiveContainer>
         <LineChart
           data={data}
@@ -39,7 +39,7 @@ export default function Chart({ data }) {
                 ...theme.typography.body1,
               }}
             >
-              Payments ($)
+              Amount
             </Label>
           </YAxis>
           <Line

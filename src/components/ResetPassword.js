@@ -39,6 +39,10 @@ export default function ResetPassword() {
     }
   };
 
+  React.useEffect(() => {
+    document.title = 'Reset password - FIUBER Backoffice';
+  }, []);
+
   return (
     <ThemeProvider theme={theme}>
       <Container component="main" maxWidth="xs">
