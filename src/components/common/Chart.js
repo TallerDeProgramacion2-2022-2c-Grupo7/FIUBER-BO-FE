@@ -74,7 +74,7 @@ export default function Chart({ data }) {
                 ...theme.typography.body1,
               }}
             >
-              Amount
+              Number of events
             </Label>
           </YAxis>
           <Tooltip contentStyle={{ borderRadius: 0 }} />
