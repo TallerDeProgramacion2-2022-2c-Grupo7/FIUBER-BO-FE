@@ -97,8 +97,79 @@ function AuthProvider({ children }) {
     await sendPasswordResetEmail(auth, email);
   };
 
+  const listRecentEvents = async () => [
+    { id: 1, fields: ['2022-10-17 19:05:59', '789789789', 'Login'] },
+    { id: 1, fields: ['2022-10-17 19:05:23', '789789789', 'Signup'] },
+    { id: 1, fields: ['2022-10-17 19:04:12', '456456456', 'Login'] },
+    { id: 1, fields: ['2022-10-17 19:02:25', '123123123', 'Login'] },
+    { id: 1, fields: ['2022-10-17 19:01:04', '123123123', 'Password reset'] },
+  ];
+
+  const listMetrics = async () => ({
+    logins: [
+      { time: '10-10', amount: 2 },
+      { time: '10-11', amount: 5 },
+      { time: '10-12', amount: 8 },
+      { time: '10-13', amount: 3 },
+      { time: '10-14', amount: 4 },
+      { time: '10-15', amount: 1 },
+      { time: '10-16', amount: 4 },
+      { time: '10-17', amount: 2 },
+      { time: '10-18', amount: 5 },
+      { time: '10-19', amount: 8 },
+      { time: '10-20', amount: 3 },
+      { time: '10-21', amount: 4 },
+      { time: '10-22', amount: 1 },
+      { time: '10-23', amount: 4 },
+      { time: '10-24', amount: 2 },
+    ],
+    signups: [
+      { time: '10-10', amount: 5 },
+      { time: '10-11', amount: 3 },
+      { time: '10-12', amount: 2 },
+      { time: '10-13', amount: 1 },
+      { time: '10-14', amount: 1 },
+      { time: '10-15', amount: 1 },
+      { time: '10-16', amount: 2 },
+      { time: '10-17', amount: 3 },
+      { time: '10-18', amount: 4 },
+      { time: '10-19', amount: 5 },
+      { time: '10-20', amount: 6 },
+      { time: '10-21', amount: 5 },
+      { time: '10-22', amount: 4 },
+      { time: '10-23', amount: 3 },
+      { time: '10-24', amount: 8 },
+    ],
+    passwordResets: [
+      { time: '10-10', amount: 4 },
+      { time: '10-11', amount: 1 },
+      { time: '10-12', amount: 0 },
+      { time: '10-13', amount: 1 },
+      { time: '10-14', amount: 2 },
+      { time: '10-15', amount: 1 },
+      { time: '10-16', amount: 0 },
+      { time: '10-17', amount: 0 },
+      { time: '10-18', amount: 1 },
+      { time: '10-19', amount: 1 },
+      { time: '10-20', amount: 3 },
+      { time: '10-21', amount: 3 },
+      { time: '10-22', amount: 1 },
+      { time: '10-23', amount: 2 },
+      { time: '10-24', amount: 3 },
+    ],
+  });
+
   const value = {
-    user, login, logout, createUser, listUsers, setUserStatus, getUser, sendPasswordReset,
+    user,
+    login,
+    logout,
+    createUser,
+    listUsers,
+    setUserStatus,
+    getUser,
+    sendPasswordReset,
+    listRecentEvents,
+    listMetrics,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

@@ -47,7 +47,7 @@ export default function Chart({ data }) {
       </div>
       <ResponsiveContainer>
         <LineChart
-          data={data}
+          data={data[metric]}
           margin={{
             top: 16,
             right: 32,
