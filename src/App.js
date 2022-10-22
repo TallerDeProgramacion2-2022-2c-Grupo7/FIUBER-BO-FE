@@ -6,6 +6,7 @@ import Dashboard from './components/Dashboard';
 import SignUp from './components/SignUp';
 import Users from './components/Users';
 import Profile from './components/Profile';
+import ResetPassword from './components/ResetPassword';
 
 export default function App() {
   return (
@@ -16,6 +17,7 @@ export default function App() {
         <Route path="/users" element={<Users />} />
         <Route path="/signup" element={<SignUp />} />
         <Route path="/profile" element={<Profile />} />
+        <Route path="/resetPassword" element={<ResetPassword />} />
       </Routes>
     </AuthProvider>
   );
