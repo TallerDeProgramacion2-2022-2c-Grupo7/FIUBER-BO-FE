@@ -17,5 +17,21 @@ const getPricingRule = async (user) => {
   return data.result;
 };
 
-// eslint-disable-next-line import/prefer-default-export
-export { getPricingRule };
+const getPricing = async (user, rules, trip) => {
+  // const { user } = useAuth();
+  const response = await fetch(`${REACT_APP_PRICING_URL}/`, {
+    method: 'POST',
+    headers: new Headers({
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${user.stsTokenManager.accessToken}`,
+    }),
+    body: JSON.stringify({ rules, trip }),
+  });
+  const data = await response.json();
+  if (!response.ok) {
+    throw new Error(data.detail);
+  }
+  return data.result;
+};
+
+export { getPricingRule, getPricing };

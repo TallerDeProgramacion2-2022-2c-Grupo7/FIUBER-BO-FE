@@ -11,7 +11,7 @@ import TextField from '@mui/material/TextField';
 import InfoIcon from '@mui/icons-material/Info';
 import Container from './common/Container';
 import { RequireAuth, useAuth } from '../contexts/Auth';
-import { getPricingRule } from '../api/pricing';
+import { getPricing, getPricingRule } from '../api/pricing';
 
 function RuleReview() {
   return (
@@ -22,7 +22,7 @@ function RuleReview() {
           Create a sample trip to test the rule.
         </Typography>
       </Grid>
-      <Grid container spacing={3}>
+      <Grid container spacing={3} sx={{ mb: '3rem' }}>
         <Grid item xs={12} sm={3}>
           <TextField
             required
@@ -140,12 +140,6 @@ function RuleReview() {
             variant="standard"
           />
         </Grid>
-      </Grid>
-      <Grid container justifyContent="center" sx={{ mt: '3rem' }}>
-        <Typography variant="h6" gutterBottom>
-          Final price:
-          <strong style={{ marginLeft: '1rem' }}>$10</strong>
-        </Typography>
       </Grid>
     </>
   );
@@ -429,6 +423,7 @@ function getStepContent(step, rule) {
 export default function PricingRule() {
   const [activeStep, setActiveStep] = useState(0);
   const [rule, setRule] = useState({});
+  const [testPrice, setTestPrice] = useState(null);
   const auth = useAuth();
 
   useEffect(() => {
@@ -449,12 +444,34 @@ export default function PricingRule() {
     setActiveStep(activeStep - 1);
   };
 
+  const handleTestRules = async () => {
+    const getValue = (id) => document.getElementById(id).value;
+    const int = (value) => window.parseInt(value, 10);
+    const testTrip = {
+      driverTripsOfDay: int(getValue('testDriverTripsOfDay')),
+      driverTripsOfMonth: int(getValue('testDriverTripsOfMonth')),
+      driverActiveDays: int(getValue('testDriverActiveDays')),
+      driverPickupDelay: int(getValue('testDriverPickupDelay')),
+      passengerTripsOfDay: int(getValue('testPassengerTripsOfDay')),
+      passengerTripsOfMonth: int(getValue('testPassengerTripsOfMonth')),
+      passengerActiveDays: int(getValue('testPassengerActiveDays')),
+      tripDuration: int(getValue('testTripDuration')),
+      tripLength: int(getValue('testTripLength')),
+      tripsInLastTimeWindow: int(getValue('testTripsInLastTimeWindow')),
+      tripStartingPoint: int(getValue('testTripStartingPoint')),
+      tripStartDatetime: getValue('testTripStartDatetime'),
+      paymentMethod: getValue('testPaymentMethod'),
+    };
+    const price = await getPricing(auth.user, rule, testTrip);
+    setTestPrice(price);
+  };
+
   return (
     <RequireAuth>
       <Container component="main" maxWidth="sm" sx={{ mb: 4 }}>
         <Paper variant="outlined" sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}>
           <Typography component="h1" variant="h4" align="center">
-            Update pricing rule
+            Update pricing rules
           </Typography>
           <Stepper activeStep={activeStep} sx={{ pt: 3, pb: 5 }}>
             {steps.map((label) => (
@@ -465,24 +482,34 @@ export default function PricingRule() {
           </Stepper>
           {activeStep === steps.length ? (
             <Typography variant="h5" gutterBottom>
-              Rule created successfully.
+              Rules updated successfully.
             </Typography>
           ) : (
             <>
               {getStepContent(activeStep, rule)}
               <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+                {activeStep === steps.length - 1 && (
+                  <>
+                    <Typography>
+                      Final price: $
+                      { testPrice || '-' }
+                    </Typography>
+                    <Button variant="outlined" onClick={handleTestRules} sx={{ mt: 3, ml: 1 }}>
+                      Test rules
+                    </Button>
+                  </>
+                )}
                 {activeStep !== 0 && (
                   <Button onClick={handleBack} sx={{ mt: 3, ml: 1 }}>
                     Back
                   </Button>
                 )}
-
                 <Button
                   variant="contained"
                   onClick={handleNext}
                   sx={{ mt: 3, ml: 1 }}
                 >
-                  {activeStep === steps.length - 1 ? 'Update rule' : 'Next'}
+                  {activeStep === steps.length - 1 ? 'Update rules' : 'Next'}
                 </Button>
               </Box>
             </>
