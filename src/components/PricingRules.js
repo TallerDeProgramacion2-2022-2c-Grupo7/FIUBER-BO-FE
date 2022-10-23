@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
 import Stepper from '@mui/material/Stepper';
@@ -9,8 +9,9 @@ import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Grid';
 import TextField from '@mui/material/TextField';
 import InfoIcon from '@mui/icons-material/Info';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Container from './common/Container';
+import { RequireAuth, useAuth } from '../contexts/Auth';
+import { getPricingRule } from '../api/pricing';
 
 function RuleReview() {
   return (
@@ -150,7 +151,7 @@ function RuleReview() {
   );
 }
 
-function PricingDiscountsForm() {
+function PricingDiscountsForm({ rule }) {
   return (
     <>
       <Grid container justifyContent="center" sx={{ mb: '3rem' }}>
@@ -168,24 +169,33 @@ function PricingDiscountsForm() {
             label="Zone discount (%)"
             fullWidth
             variant="standard"
+            value={rule.discounts?.zone?.value}
+            onChange={() => {}}
+            InputLabelProps={{ shrink: true }}
           />
         </Grid>
         <Grid item xs={12} md={4}>
           <TextField
             required
             id="zoneDiscountCenter"
-            label="Center"
+            label="Center (latitude,longitude)"
             fullWidth
             variant="standard"
+            value={rule.discounts?.zone?.center}
+            onChange={() => {}}
+            InputLabelProps={{ shrink: true }}
           />
         </Grid>
         <Grid item xs={12} md={4}>
           <TextField
             required
             id="zoneDiscountRadius"
-            label="Radius"
+            label="Radius (meters)"
             fullWidth
             variant="standard"
+            value={rule.discounts?.zone?.radius}
+            onChange={() => {}}
+            InputLabelProps={{ shrink: true }}
           />
         </Grid>
         <Grid item xs={12} md={4}>
@@ -195,6 +205,9 @@ function PricingDiscountsForm() {
             label="Time discount (%)"
             fullWidth
             variant="standard"
+            value={rule.discounts?.time?.value}
+            onChange={() => {}}
+            InputLabelProps={{ shrink: true }}
           />
         </Grid>
         <Grid item xs={12} md={4}>
@@ -204,6 +217,9 @@ function PricingDiscountsForm() {
             label="Days"
             fullWidth
             variant="standard"
+            value={rule.discounts?.time?.days.join(',')}
+            onChange={() => {}}
+            InputLabelProps={{ shrink: true }}
           />
         </Grid>
         <Grid item xs={12} md={4}>
@@ -213,6 +229,9 @@ function PricingDiscountsForm() {
             label="Time range"
             fullWidth
             variant="standard"
+            value={rule.discounts?.time?.hours.join('-')}
+            onChange={() => {}}
+            InputLabelProps={{ shrink: true }}
           />
         </Grid>
         <Grid item xs={12} md={6}>
@@ -222,6 +241,9 @@ function PricingDiscountsForm() {
             label="Debit card's discount (%)"
             fullWidth
             variant="standard"
+            value={rule.discounts?.payment?.debit}
+            onChange={() => {}}
+            InputLabelProps={{ shrink: true }}
           />
         </Grid>
         <Grid item xs={12} md={6}>
@@ -231,6 +253,9 @@ function PricingDiscountsForm() {
             label="Credit card's discount (%)"
             fullWidth
             variant="standard"
+            value={rule.discounts?.payment?.credit}
+            onChange={() => {}}
+            InputLabelProps={{ shrink: true }}
           />
         </Grid>
       </Grid>
@@ -238,13 +263,13 @@ function PricingDiscountsForm() {
   );
 }
 
-function PricingWeightsForm() {
+function PricingWeightsForm({ rule }) {
   return (
     <>
       <Grid container justifyContent="center" sx={{ mb: '3rem' }}>
         <Typography variant="p" gutterBottom>
           <InfoIcon sx={{ mb: '-0.3rem', mr: '0.3rem' }} />
-          Set the rule&apos;s pricing weights.
+          Set the rule&apos;s pricing weights (from -100 to 100).
           The price is increased by positive weights and decreased by negative weights.
         </Typography>
       </Grid>
@@ -256,6 +281,9 @@ function PricingWeightsForm() {
             label="Driver's trips of the day"
             fullWidth
             variant="standard"
+            value={rule.weights?.driverTripsOfDay}
+            onChange={() => {}}
+            InputLabelProps={{ shrink: true }}
           />
         </Grid>
         <Grid item xs={12} sm={3}>
@@ -265,6 +293,9 @@ function PricingWeightsForm() {
             label="Driver's trips of the month"
             fullWidth
             variant="standard"
+            value={rule.weights?.driverTripsOfMonth}
+            onChange={() => {}}
+            InputLabelProps={{ shrink: true }}
           />
         </Grid>
         <Grid item xs={12} sm={3}>
@@ -274,6 +305,9 @@ function PricingWeightsForm() {
             label="Driver's active days"
             fullWidth
             variant="standard"
+            value={rule.weights?.driverActiveDays}
+            onChange={() => {}}
+            InputLabelProps={{ shrink: true }}
           />
         </Grid>
         <Grid item xs={12} sm={3}>
@@ -283,6 +317,9 @@ function PricingWeightsForm() {
             label="Driver's pickup delay"
             fullWidth
             variant="standard"
+            value={rule.weights?.driverPickupDelay}
+            onChange={() => {}}
+            InputLabelProps={{ shrink: true }}
           />
         </Grid>
         <Grid item xs={12} sm={4}>
@@ -292,6 +329,9 @@ function PricingWeightsForm() {
             label="Passenger's trips of the day"
             fullWidth
             variant="standard"
+            value={rule.weights?.passengerTripsOfDay}
+            onChange={() => {}}
+            InputLabelProps={{ shrink: true }}
           />
         </Grid>
         <Grid item xs={12} sm={4}>
@@ -301,6 +341,9 @@ function PricingWeightsForm() {
             label="Passenger's trips of the month"
             fullWidth
             variant="standard"
+            value={rule.weights?.passengerTripsOfMonth}
+            onChange={() => {}}
+            InputLabelProps={{ shrink: true }}
           />
         </Grid>
         <Grid item xs={12} sm={4}>
@@ -310,6 +353,9 @@ function PricingWeightsForm() {
             label="Passenger's active days"
             fullWidth
             variant="standard"
+            value={rule.weights?.passengerActiveDays}
+            onChange={() => {}}
+            InputLabelProps={{ shrink: true }}
           />
         </Grid>
         <Grid item xs={12} sm={6}>
@@ -319,6 +365,9 @@ function PricingWeightsForm() {
             label="Trip's duration"
             fullWidth
             variant="standard"
+            value={rule.weights?.tripDuration}
+            onChange={() => {}}
+            InputLabelProps={{ shrink: true }}
           />
         </Grid>
         <Grid item xs={12} sm={6}>
@@ -328,6 +377,9 @@ function PricingWeightsForm() {
             label="Trip's length"
             fullWidth
             variant="standard"
+            value={rule.weights?.tripLength}
+            onChange={() => {}}
+            InputLabelProps={{ shrink: true }}
           />
         </Grid>
         <Grid item xs={12} sm={6}>
@@ -337,15 +389,21 @@ function PricingWeightsForm() {
             label="Number of trips in last time window"
             fullWidth
             variant="standard"
+            value={rule.weights?.tripsInLastTimeWindow?.value}
+            onChange={() => {}}
+            InputLabelProps={{ shrink: true }}
           />
         </Grid>
         <Grid item xs={12} sm={6}>
           <TextField
             required
             id="timeWindowSize"
-            label="Time window size"
+            label="Time window size (minutes)"
             fullWidth
             variant="standard"
+            value={rule.weights?.tripsInLastTimeWindow?.size}
+            onChange={() => {}}
+            InputLabelProps={{ shrink: true }}
           />
         </Grid>
       </Grid>
@@ -355,23 +413,33 @@ function PricingWeightsForm() {
 
 const steps = ['Pricing weights', 'Pricing discounts', 'Rule review'];
 
-function getStepContent(step) {
+function getStepContent(step, rule) {
   switch (step) {
     case 0:
-      return <PricingWeightsForm />;
+      return <PricingWeightsForm rule={rule} />;
     case 1:
-      return <PricingDiscountsForm />;
+      return <PricingDiscountsForm rule={rule} />;
     case 2:
-      return <RuleReview />;
+      return <RuleReview rule={rule} />;
     default:
       throw new Error('Unknown step');
   }
 }
 
-const theme = createTheme();
+export default function PricingRule() {
+  const [activeStep, setActiveStep] = useState(0);
+  const [rule, setRule] = useState({});
+  const auth = useAuth();
 
-export default function Checkout() {
-  const [activeStep, setActiveStep] = React.useState(0);
+  useEffect(() => {
+    document.title = 'Pricing rules - FIUBER Backoffice';
+    const loadRule = async () => {
+      const pricingRule = await getPricingRule(auth.user);
+      setRule(pricingRule);
+    };
+
+    loadRule();
+  }, []);
 
   const handleNext = () => {
     setActiveStep(activeStep + 1);
@@ -382,11 +450,11 @@ export default function Checkout() {
   };
 
   return (
-    <ThemeProvider theme={theme}>
+    <RequireAuth>
       <Container component="main" maxWidth="sm" sx={{ mb: 4 }}>
         <Paper variant="outlined" sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}>
           <Typography component="h1" variant="h4" align="center">
-            Create pricing rule
+            Update pricing rule
           </Typography>
           <Stepper activeStep={activeStep} sx={{ pt: 3, pb: 5 }}>
             {steps.map((label) => (
@@ -401,7 +469,7 @@ export default function Checkout() {
             </Typography>
           ) : (
             <>
-              {getStepContent(activeStep)}
+              {getStepContent(activeStep, rule)}
               <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
                 {activeStep !== 0 && (
                   <Button onClick={handleBack} sx={{ mt: 3, ml: 1 }}>
@@ -414,13 +482,13 @@ export default function Checkout() {
                   onClick={handleNext}
                   sx={{ mt: 3, ml: 1 }}
                 >
-                  {activeStep === steps.length - 1 ? 'Create rule' : 'Next'}
+                  {activeStep === steps.length - 1 ? 'Update rule' : 'Next'}
                 </Button>
               </Box>
             </>
           )}
         </Paper>
       </Container>
-    </ThemeProvider>
+    </RequireAuth>
   );
 }
