@@ -163,7 +163,7 @@ function PricingDiscountsForm({ rule }) {
             label="Zone discount (%)"
             fullWidth
             variant="standard"
-            value={rule.discounts?.zone?.value}
+            value={rule.discounts?.zone}
             onChange={() => {}}
             InputLabelProps={{ shrink: true }}
           />
@@ -175,7 +175,7 @@ function PricingDiscountsForm({ rule }) {
             label="Center (latitude,longitude)"
             fullWidth
             variant="standard"
-            value={rule.discounts?.zone?.center}
+            value={`${rule.parameters?.zoneCenter.latitude},${rule.parameters?.zoneCenter.longitude}`}
             onChange={() => {}}
             InputLabelProps={{ shrink: true }}
           />
@@ -187,7 +187,7 @@ function PricingDiscountsForm({ rule }) {
             label="Radius (meters)"
             fullWidth
             variant="standard"
-            value={rule.discounts?.zone?.radius}
+            value={rule.parameters?.zoneRadius}
             onChange={() => {}}
             InputLabelProps={{ shrink: true }}
           />
@@ -199,7 +199,7 @@ function PricingDiscountsForm({ rule }) {
             label="Time discount (%)"
             fullWidth
             variant="standard"
-            value={rule.discounts?.time?.value}
+            value={rule.discounts?.time}
             onChange={() => {}}
             InputLabelProps={{ shrink: true }}
           />
@@ -211,7 +211,7 @@ function PricingDiscountsForm({ rule }) {
             label="Days"
             fullWidth
             variant="standard"
-            value={rule.discounts?.time?.days.join(',')}
+            value={rule.parameters?.timeDays.join(',')}
             onChange={() => {}}
             InputLabelProps={{ shrink: true }}
           />
@@ -223,7 +223,7 @@ function PricingDiscountsForm({ rule }) {
             label="Time range"
             fullWidth
             variant="standard"
-            value={rule.discounts?.time?.hours.join('-')}
+            value={rule.parameters?.timeHours.join('-')}
             onChange={() => {}}
             InputLabelProps={{ shrink: true }}
           />
@@ -235,7 +235,7 @@ function PricingDiscountsForm({ rule }) {
             label="Debit card's discount (%)"
             fullWidth
             variant="standard"
-            value={rule.discounts?.payment?.debit}
+            value={rule.discounts?.paymentDebit}
             onChange={() => {}}
             InputLabelProps={{ shrink: true }}
           />
@@ -247,7 +247,7 @@ function PricingDiscountsForm({ rule }) {
             label="Credit card's discount (%)"
             fullWidth
             variant="standard"
-            value={rule.discounts?.payment?.credit}
+            value={rule.discounts?.paymentCredit}
             onChange={() => {}}
             InputLabelProps={{ shrink: true }}
           />

@@ -7,7 +7,7 @@ const getPricingRule = async (user) => {
   const response = await fetch(`${REACT_APP_PRICING_URL}/rules`, {
     method: 'GET',
     headers: new Headers({
-      Authorization: `Bearer ${user.stsTokenManager.accessToken}`,
+      Authorization: user.stsTokenManager.accessToken,
     }),
   });
   const data = await response.json();
@@ -19,11 +19,11 @@ const getPricingRule = async (user) => {
 
 const getPricing = async (user, rules, trip) => {
   // const { user } = useAuth();
-  const response = await fetch(`${REACT_APP_PRICING_URL}/`, {
+  const response = await fetch(`${REACT_APP_PRICING_URL}/calculate`, {
     method: 'POST',
     headers: new Headers({
       'Content-Type': 'application/json',
-      Authorization: `Bearer ${user.stsTokenManager.accessToken}`,
+      Authorization: user.stsTokenManager.accessToken,
     }),
     body: JSON.stringify({ rules, trip }),
   });
