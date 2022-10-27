@@ -98,8 +98,17 @@ function RuleReview() {
         <Grid item xs={12} sm={4}>
           <TextField
             required
-            id="testTripLength"
-            label="Trip's length"
+            id="testTripFrom"
+            label="Trip's origin (latitude,longitude)"
+            fullWidth
+            variant="standard"
+          />
+        </Grid>
+        <Grid item xs={12} sm={4}>
+          <TextField
+            required
+            id="testTripTo"
+            label="Trip's destination (latitude,longitude)"
             fullWidth
             variant="standard"
           />
@@ -109,15 +118,6 @@ function RuleReview() {
             required
             id="testTripsInLastTimeWindow"
             label="Number of trips in last time window"
-            fullWidth
-            variant="standard"
-          />
-        </Grid>
-        <Grid item xs={12} sm={4}>
-          <TextField
-            required
-            id="testTripStartingPoint"
-            label="Trip's starting point"
             fullWidth
             variant="standard"
           />
@@ -446,21 +446,15 @@ export default function PricingRule() {
 
   const handleTestRules = async () => {
     const getValue = (id) => document.getElementById(id).value;
-    const int = (value) => window.parseInt(value, 10);
     const testTrip = {
-      driverTripsOfDay: int(getValue('testDriverTripsOfDay')),
-      driverTripsOfMonth: int(getValue('testDriverTripsOfMonth')),
-      driverActiveDays: int(getValue('testDriverActiveDays')),
-      driverPickupDelay: int(getValue('testDriverPickupDelay')),
-      passengerTripsOfDay: int(getValue('testPassengerTripsOfDay')),
-      passengerTripsOfMonth: int(getValue('testPassengerTripsOfMonth')),
-      passengerActiveDays: int(getValue('testPassengerActiveDays')),
-      tripDuration: int(getValue('testTripDuration')),
-      tripLength: int(getValue('testTripLength')),
-      tripsInLastTimeWindow: int(getValue('testTripsInLastTimeWindow')),
-      tripStartingPoint: int(getValue('testTripStartingPoint')),
-      tripStartDatetime: getValue('testTripStartDatetime'),
-      paymentMethod: getValue('testPaymentMethod'),
+      from: {
+        latitude: window.parseFloat(getValue('testTripFrom').split(',')[0]),
+        longitude: window.parseFloat(getValue('testTripFrom').split(',')[1]),
+      },
+      to: {
+        latitude: window.parseFloat(getValue('testTripTo').split(',')[0]),
+        longitude: window.parseFloat(getValue('testTripTo').split(',')[1]),
+      },
     };
     const price = await getPricing(auth.user, rule, testTrip);
     setTestPrice(price);

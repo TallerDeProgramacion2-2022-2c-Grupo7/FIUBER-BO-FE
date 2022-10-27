@@ -17,15 +17,15 @@ const getPricingRule = async (user) => {
   return data.result;
 };
 
-const getPricing = async (user, rules, trip) => {
+const getPricing = async (user, rules, { from, to }) => {
   // const { user } = useAuth();
-  const response = await fetch(`${REACT_APP_PRICING_URL}/calculate`, {
+  const response = await fetch(`${REACT_APP_PRICING_URL}/costs/calculate`, {
     method: 'POST',
     headers: new Headers({
       'Content-Type': 'application/json',
       Authorization: user.stsTokenManager.accessToken,
     }),
-    body: JSON.stringify({ rules, trip }),
+    body: JSON.stringify({ rules, from, to }),
   });
   const data = await response.json();
   if (!response.ok) {
