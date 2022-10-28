@@ -13,6 +13,313 @@ import Container from './common/Container';
 import { RequireAuth, useAuth } from '../contexts/Auth';
 import { getPricing, getPricingRule, updatePricingRules } from '../api/pricing';
 
+const steps = ['Pricing weights', 'Pricing discounts', 'Rule review'];
+
+// eslint-disable-next-line no-unused-vars
+function PricingWeightsForm({ rule, setRule }) {
+  const updateRulesWeights = (e) => {
+    const updatedRule = { ...rule };
+    // eslint-disable-next-line no-prototype-builtins
+    if (updatedRule.weights.hasOwnProperty(e.target.id)) {
+      updatedRule.weights[e.target.id] = e.target.value;
+    } else {
+      updatedRule.parameters[e.target.id] = e.target.value;
+    }
+    setRule(updatedRule);
+  };
+  return (
+    <>
+      <Grid container justifyContent="center" sx={{ mb: '3rem' }}>
+        <Typography variant="p" gutterBottom>
+          <InfoIcon sx={{ mb: '-0.3rem', mr: '0.3rem' }} />
+          Set the rule&apos;s pricing weights (from -100 to 100).
+          The price is increased by positive weights and decreased by negative weights.
+        </Typography>
+      </Grid>
+      <Grid container spacing={3}>
+        <Grid item xs={12} sm={3}>
+          <TextField
+            required
+            id="driverTripsOfDay"
+            label="Driver's trips of the day"
+            fullWidth
+            variant="standard"
+            defaultValue={rule.weights?.driverTripsOfDay}
+            value={rule.weights?.driverTripsOfDay}
+            onChange={updateRulesWeights}
+            InputLabelProps={{ shrink: true }}
+          />
+        </Grid>
+        <Grid item xs={12} sm={3}>
+          <TextField
+            required
+            id="driverTripsOfMonth"
+            label="Driver's trips of the month"
+            fullWidth
+            variant="standard"
+            value={rule.weights?.driverTripsOfMonth}
+            defaultValue={rule.weights?.driverTripsOfMonth}
+            onChange={updateRulesWeights}
+            InputLabelProps={{ shrink: true }}
+          />
+        </Grid>
+        <Grid item xs={12} sm={3}>
+          <TextField
+            required
+            id="driverActiveDays"
+            label="Driver's active days"
+            fullWidth
+            variant="standard"
+            value={rule.weights?.driverActiveDays}
+            defaultValue={rule.weights?.driverActiveDays}
+            onChange={updateRulesWeights}
+            InputLabelProps={{ shrink: true }}
+          />
+        </Grid>
+        <Grid item xs={12} sm={3}>
+          <TextField
+            required
+            id="driverPickupDelay"
+            label="Driver's pickup delay"
+            fullWidth
+            variant="standard"
+            value={rule.weights?.driverPickupDelay}
+            defaultValue={rule.weights?.driverPickupDelay}
+            onChange={updateRulesWeights}
+            InputLabelProps={{ shrink: true }}
+          />
+        </Grid>
+        <Grid item xs={12} sm={4}>
+          <TextField
+            required
+            id="passengerTripsOfDay"
+            label="Passenger's trips of the day"
+            fullWidth
+            variant="standard"
+            value={rule.weights?.passengerTripsOfDay}
+            defaultValue={rule.weights?.passengerTripsOfDay}
+            onChange={updateRulesWeights}
+            InputLabelProps={{ shrink: true }}
+          />
+        </Grid>
+        <Grid item xs={12} sm={4}>
+          <TextField
+            required
+            id="passengerTripsOfMonth"
+            label="Passenger's trips of the month"
+            fullWidth
+            variant="standard"
+            value={rule.weights?.passengerTripsOfMonth}
+            defaultValue={rule.weights?.passengerTripsOfMonth}
+            onChange={updateRulesWeights}
+            InputLabelProps={{ shrink: true }}
+          />
+        </Grid>
+        <Grid item xs={12} sm={4}>
+          <TextField
+            required
+            id="passengerActiveDays"
+            label="Passenger's active days"
+            fullWidth
+            variant="standard"
+            value={rule.weights?.passengerActiveDays}
+            defaultValue={rule.weights?.passengerActiveDays}
+            onChange={updateRulesWeights}
+            InputLabelProps={{ shrink: true }}
+          />
+        </Grid>
+        <Grid item xs={12} sm={6}>
+          <TextField
+            required
+            id="tripDuration"
+            label="Trip's duration"
+            fullWidth
+            variant="standard"
+            value={rule.weights?.tripDuration}
+            defaultValue={rule.weights?.tripDuration}
+            onChange={updateRulesWeights}
+            InputLabelProps={{ shrink: true }}
+          />
+        </Grid>
+        <Grid item xs={12} sm={6}>
+          <TextField
+            required
+            id="tripLength"
+            label="Trip's length"
+            fullWidth
+            variant="standard"
+            value={rule.weights?.tripLength}
+            defaultValue={rule.weights?.tripLength}
+            onChange={updateRulesWeights}
+            InputLabelProps={{ shrink: true }}
+          />
+        </Grid>
+        <Grid item xs={12} sm={6}>
+          <TextField
+            required
+            id="tripsInLastTimeWindow"
+            label="Number of trips in last time window"
+            fullWidth
+            variant="standard"
+            value={rule.weights?.tripsInLastTimeWindow}
+            defaultValue={rule.weights?.tripsInLastTimeWindow}
+            onChange={updateRulesWeights}
+            InputLabelProps={{ shrink: true }}
+          />
+        </Grid>
+        <Grid item xs={12} sm={6}>
+          <TextField
+            required
+            id="timeWindowSize"
+            label="Time window size (minutes)"
+            fullWidth
+            variant="standard"
+            value={rule.parameters?.timeWindowSize}
+            defaultValue={rule.parameters?.timeWindowSize}
+            onChange={updateRulesWeights}
+            InputLabelProps={{ shrink: true }}
+          />
+        </Grid>
+      </Grid>
+    </>
+  );
+}
+
+function PricingDiscountsForm({ rule, setRule }) {
+  const updateRulesDiscounts = (e) => {
+    const updatedRule = { ...rule };
+    // eslint-disable-next-line no-prototype-builtins
+    if (updatedRule.discounts.hasOwnProperty(e.target.id)) {
+      updatedRule.discounts[e.target.id] = e.target.value;
+    } else if (e.target.id === 'zoneCenter') {
+      const [latitude, longitude] = e.target.value.split(',');
+      updatedRule.parameters.zoneCenter.latitude = latitude;
+      updatedRule.parameters.zoneCenter.longitude = longitude;
+    } else {
+      updatedRule.parameters[e.target.id] = e.target.value;
+    }
+    setRule(updatedRule);
+  };
+  return (
+    <>
+      <Grid container justifyContent="center" sx={{ mb: '3rem' }}>
+        <Typography variant="p" gutterBottom>
+          <InfoIcon sx={{ mb: '-0.3rem', mr: '0.3rem' }} />
+          Set the rule&apos;s pricing discounts.
+          If more than one discount applies, only the biggest will be used.
+        </Typography>
+      </Grid>
+      <Grid container spacing={3}>
+        <Grid item xs={12} md={4}>
+          <TextField
+            required
+            id="zone"
+            label="Zone discount (%)"
+            fullWidth
+            variant="standard"
+            value={rule.discounts?.zone}
+            defaultValue={rule.discounts?.zone}
+            onChange={updateRulesDiscounts}
+            InputLabelProps={{ shrink: true }}
+          />
+        </Grid>
+        <Grid item xs={12} md={4}>
+          <TextField
+            required
+            id="zoneCenter"
+            label="Center (latitude,longitude)"
+            fullWidth
+            variant="standard"
+            // eslint-disable-next-line max-len
+            value={rule.parameters ? `${rule.parameters?.zoneCenter.latitude},${rule.parameters?.zoneCenter.longitude}` : ''}
+            defaultValue={rule.parameters ? `${rule.parameters?.zoneCenter.latitude},${rule.parameters?.zoneCenter.longitude}` : ''}
+            onChange={updateRulesDiscounts}
+            InputLabelProps={{ shrink: true }}
+          />
+        </Grid>
+        <Grid item xs={12} md={4}>
+          <TextField
+            required
+            id="zoneRadius"
+            label="Radius (meters)"
+            fullWidth
+            variant="standard"
+            value={rule.parameters?.zoneRadius}
+            defaultValue={rule.parameters?.zoneRadius}
+            onChange={updateRulesDiscounts}
+            InputLabelProps={{ shrink: true }}
+          />
+        </Grid>
+        <Grid item xs={12} md={4}>
+          <TextField
+            required
+            id="time"
+            label="Time discount (%)"
+            fullWidth
+            variant="standard"
+            value={rule.discounts?.time}
+            defaultValue={rule.discounts?.time}
+            onChange={updateRulesDiscounts}
+            InputLabelProps={{ shrink: true }}
+          />
+        </Grid>
+        <Grid item xs={12} md={4}>
+          <TextField
+            required
+            id="timeDays"
+            label="Days"
+            fullWidth
+            variant="standard"
+            value={rule.parameters?.timeDays.join(',')}
+            defaultValue={rule.parameters?.timeDays.join(',')}
+            onChange={updateRulesDiscounts}
+            InputLabelProps={{ shrink: true }}
+          />
+        </Grid>
+        <Grid item xs={12} md={4}>
+          <TextField
+            required
+            id="timeHours"
+            label="Time range"
+            fullWidth
+            variant="standard"
+            value={rule.parameters?.timeHours.join('-')}
+            defaultValue={rule.parameters?.timeHours.join('-')}
+            onChange={updateRulesDiscounts}
+            InputLabelProps={{ shrink: true }}
+          />
+        </Grid>
+        <Grid item xs={12} md={6}>
+          <TextField
+            required
+            id="paymentDebit"
+            label="Debit card's discount (%)"
+            fullWidth
+            variant="standard"
+            value={rule.discounts?.paymentDebit}
+            defaultValue={rule.discounts?.paymentDebit}
+            onChange={updateRulesDiscounts}
+            InputLabelProps={{ shrink: true }}
+          />
+        </Grid>
+        <Grid item xs={12} md={6}>
+          <TextField
+            required
+            id="paymentCredit"
+            label="Credit card's discount (%)"
+            fullWidth
+            variant="standard"
+            value={rule.discounts?.paymentCredit}
+            defaultValue={rule.discounts?.paymentCredit}
+            onChange={updateRulesDiscounts}
+            InputLabelProps={{ shrink: true }}
+          />
+        </Grid>
+      </Grid>
+    </>
+  );
+}
+
 function RuleReview() {
   return (
     <>
@@ -136,275 +443,12 @@ function RuleReview() {
   );
 }
 
-function PricingDiscountsForm({ rule }) {
-  return (
-    <>
-      <Grid container justifyContent="center" sx={{ mb: '3rem' }}>
-        <Typography variant="p" gutterBottom>
-          <InfoIcon sx={{ mb: '-0.3rem', mr: '0.3rem' }} />
-          Set the rule&apos;s pricing discounts.
-          If more than one discount applies, only the biggest will be used.
-        </Typography>
-      </Grid>
-      <Grid container spacing={3}>
-        <Grid item xs={12} md={4}>
-          <TextField
-            required
-            id="zoneDiscountValue"
-            label="Zone discount (%)"
-            fullWidth
-            variant="standard"
-            value={rule.discounts?.zone}
-            onChange={() => {}}
-            InputLabelProps={{ shrink: true }}
-          />
-        </Grid>
-        <Grid item xs={12} md={4}>
-          <TextField
-            required
-            id="zoneDiscountCenter"
-            label="Center (latitude,longitude)"
-            fullWidth
-            variant="standard"
-            // eslint-disable-next-line max-len
-            value={rule.parameters ? `${rule.parameters?.zoneCenter.latitude},${rule.parameters?.zoneCenter.longitude}` : ''}
-            onChange={() => {}}
-            InputLabelProps={{ shrink: true }}
-          />
-        </Grid>
-        <Grid item xs={12} md={4}>
-          <TextField
-            required
-            id="zoneDiscountRadius"
-            label="Radius (meters)"
-            fullWidth
-            variant="standard"
-            value={rule.parameters?.zoneRadius}
-            onChange={() => {}}
-            InputLabelProps={{ shrink: true }}
-          />
-        </Grid>
-        <Grid item xs={12} md={4}>
-          <TextField
-            required
-            id="timeDiscountValue"
-            label="Time discount (%)"
-            fullWidth
-            variant="standard"
-            value={rule.discounts?.time}
-            onChange={() => {}}
-            InputLabelProps={{ shrink: true }}
-          />
-        </Grid>
-        <Grid item xs={12} md={4}>
-          <TextField
-            required
-            id="timeDiscountDays"
-            label="Days"
-            fullWidth
-            variant="standard"
-            value={rule.parameters?.timeDays.join(',')}
-            onChange={() => {}}
-            InputLabelProps={{ shrink: true }}
-          />
-        </Grid>
-        <Grid item xs={12} md={4}>
-          <TextField
-            required
-            id="timeDiscountTimeRange"
-            label="Time range"
-            fullWidth
-            variant="standard"
-            value={rule.parameters?.timeHours.join('-')}
-            onChange={() => {}}
-            InputLabelProps={{ shrink: true }}
-          />
-        </Grid>
-        <Grid item xs={12} md={6}>
-          <TextField
-            required
-            id="debitCardDiscount"
-            label="Debit card's discount (%)"
-            fullWidth
-            variant="standard"
-            value={rule.discounts?.paymentDebit}
-            onChange={() => {}}
-            InputLabelProps={{ shrink: true }}
-          />
-        </Grid>
-        <Grid item xs={12} md={6}>
-          <TextField
-            required
-            id="creditCardDiscount"
-            label="Credit card's discount (%)"
-            fullWidth
-            variant="standard"
-            value={rule.discounts?.paymentCredit}
-            onChange={() => {}}
-            InputLabelProps={{ shrink: true }}
-          />
-        </Grid>
-      </Grid>
-    </>
-  );
-}
-
-function PricingWeightsForm({ rule }) {
-  return (
-    <>
-      <Grid container justifyContent="center" sx={{ mb: '3rem' }}>
-        <Typography variant="p" gutterBottom>
-          <InfoIcon sx={{ mb: '-0.3rem', mr: '0.3rem' }} />
-          Set the rule&apos;s pricing weights (from -100 to 100).
-          The price is increased by positive weights and decreased by negative weights.
-        </Typography>
-      </Grid>
-      <Grid container spacing={3}>
-        <Grid item xs={12} sm={3}>
-          <TextField
-            required
-            id="driverTripsOfDay"
-            label="Driver's trips of the day"
-            fullWidth
-            variant="standard"
-            value={rule.weights?.driverTripsOfDay}
-            onChange={() => {}}
-            InputLabelProps={{ shrink: true }}
-          />
-        </Grid>
-        <Grid item xs={12} sm={3}>
-          <TextField
-            required
-            id="driverTripsOfMonth"
-            label="Driver's trips of the month"
-            fullWidth
-            variant="standard"
-            value={rule.weights?.driverTripsOfMonth}
-            onChange={() => {}}
-            InputLabelProps={{ shrink: true }}
-          />
-        </Grid>
-        <Grid item xs={12} sm={3}>
-          <TextField
-            required
-            id="driverActiveDays"
-            label="Driver's active days"
-            fullWidth
-            variant="standard"
-            value={rule.weights?.driverActiveDays}
-            onChange={() => {}}
-            InputLabelProps={{ shrink: true }}
-          />
-        </Grid>
-        <Grid item xs={12} sm={3}>
-          <TextField
-            required
-            id="driverPickupDelay"
-            label="Driver's pickup delay"
-            fullWidth
-            variant="standard"
-            value={rule.weights?.driverPickupDelay}
-            onChange={() => {}}
-            InputLabelProps={{ shrink: true }}
-          />
-        </Grid>
-        <Grid item xs={12} sm={4}>
-          <TextField
-            required
-            id="passengerTripsOfDay"
-            label="Passenger's trips of the day"
-            fullWidth
-            variant="standard"
-            value={rule.weights?.passengerTripsOfDay}
-            onChange={() => {}}
-            InputLabelProps={{ shrink: true }}
-          />
-        </Grid>
-        <Grid item xs={12} sm={4}>
-          <TextField
-            required
-            id="passengerTripsOfMonth"
-            label="Passenger's trips of the month"
-            fullWidth
-            variant="standard"
-            value={rule.weights?.passengerTripsOfMonth}
-            onChange={() => {}}
-            InputLabelProps={{ shrink: true }}
-          />
-        </Grid>
-        <Grid item xs={12} sm={4}>
-          <TextField
-            required
-            id="passengerActiveDays"
-            label="Passenger's active days"
-            fullWidth
-            variant="standard"
-            value={rule.weights?.passengerActiveDays}
-            onChange={() => {}}
-            InputLabelProps={{ shrink: true }}
-          />
-        </Grid>
-        <Grid item xs={12} sm={6}>
-          <TextField
-            required
-            id="tripDuration"
-            label="Trip's duration"
-            fullWidth
-            variant="standard"
-            value={rule.weights?.tripDuration}
-            onChange={() => {}}
-            InputLabelProps={{ shrink: true }}
-          />
-        </Grid>
-        <Grid item xs={12} sm={6}>
-          <TextField
-            required
-            id="tripLength"
-            label="Trip's length"
-            fullWidth
-            variant="standard"
-            value={rule.weights?.tripLength}
-            onChange={() => {}}
-            InputLabelProps={{ shrink: true }}
-          />
-        </Grid>
-        <Grid item xs={12} sm={6}>
-          <TextField
-            required
-            id="tripsInLastTimeWindow"
-            label="Number of trips in last time window"
-            fullWidth
-            variant="standard"
-            value={rule.weights?.tripsInLastTimeWindow}
-            onChange={() => {}}
-            InputLabelProps={{ shrink: true }}
-          />
-        </Grid>
-        <Grid item xs={12} sm={6}>
-          <TextField
-            required
-            id="timeWindowSize"
-            label="Time window size (minutes)"
-            fullWidth
-            variant="standard"
-            value={rule.parameters?.timeWindowSize}
-            onChange={() => {}}
-            InputLabelProps={{ shrink: true }}
-          />
-        </Grid>
-      </Grid>
-    </>
-  );
-}
-
-const steps = ['Pricing weights', 'Pricing discounts', 'Rule review'];
-
-function getStepContent(step, rule) {
+function getStepContent(step, rule, setRule) {
   switch (step) {
     case 0:
-      return <PricingWeightsForm rule={rule} />;
+      return <PricingWeightsForm rule={rule} setRule={setRule} />;
     case 1:
-      return <PricingDiscountsForm rule={rule} />;
+      return <PricingDiscountsForm rule={rule} setRule={setRule} />;
     case 2:
       return <RuleReview rule={rule} />;
     default:
@@ -476,7 +520,7 @@ export default function PricingRule() {
             </Typography>
           ) : (
             <>
-              {getStepContent(activeStep, rule)}
+              {getStepContent(activeStep, rule, setRule)}
               <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
                 {activeStep === steps.length - 1 && (
                   <>
