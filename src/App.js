@@ -7,6 +7,7 @@ import SignUp from './components/SignUp';
 import Users from './components/Users';
 import Profile from './components/Profile';
 import ResetPassword from './components/ResetPassword';
+import PricingRules from './components/PricingRules';
 
 export default function App() {
   return (
@@ -18,6 +19,7 @@ export default function App() {
         <Route path="/signup" element={<SignUp />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/resetPassword" element={<ResetPassword />} />
+        <Route path="/pricing" element={<PricingRules />} />
       </Routes>
     </AuthProvider>
   );

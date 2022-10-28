@@ -20,6 +20,7 @@ import ListItemText from '@mui/material/ListItemText';
 import PeopleIcon from '@mui/icons-material/People';
 import BarChartIcon from '@mui/icons-material/BarChart';
 import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
+import RequestQuoteIcon from '@mui/icons-material/RequestQuote';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/Auth';
 import Copyright from './Copyright';
@@ -106,6 +107,12 @@ function DashboardContent({ children }) {
           <AdminPanelSettingsIcon />
         </ListItemIcon>
         <ListItemText primary="Administrators" />
+      </ListItemButton>
+      <ListItemButton onClick={() => navigate('/pricing', { replace: true })}>
+        <ListItemIcon>
+          <RequestQuoteIcon />
+        </ListItemIcon>
+        <ListItemText primary="Pricing rules" />
       </ListItemButton>
     </>
   );
