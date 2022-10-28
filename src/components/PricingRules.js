@@ -11,7 +11,7 @@ import TextField from '@mui/material/TextField';
 import InfoIcon from '@mui/icons-material/Info';
 import Container from './common/Container';
 import { RequireAuth, useAuth } from '../contexts/Auth';
-import { getPricing, getPricingRule } from '../api/pricing';
+import { getPricing, getPricingRule, updatePricingRules } from '../api/pricing';
 
 function RuleReview() {
   return (
@@ -125,15 +125,6 @@ function RuleReview() {
         <Grid item xs={12} sm={4}>
           <TextField
             required
-            id="testTripStartDatetime"
-            label="Trip's start datetime"
-            fullWidth
-            variant="standard"
-          />
-        </Grid>
-        <Grid item xs={12} sm={4}>
-          <TextField
-            required
             id="testPaymentMethod"
             label="Payment method"
             fullWidth
@@ -175,7 +166,8 @@ function PricingDiscountsForm({ rule }) {
             label="Center (latitude,longitude)"
             fullWidth
             variant="standard"
-            value={`${rule.parameters?.zoneCenter.latitude},${rule.parameters?.zoneCenter.longitude}`}
+            // eslint-disable-next-line max-len
+            value={rule.parameters ? `${rule.parameters?.zoneCenter.latitude},${rule.parameters?.zoneCenter.longitude}` : ''}
             onChange={() => {}}
             InputLabelProps={{ shrink: true }}
           />
@@ -383,7 +375,7 @@ function PricingWeightsForm({ rule }) {
             label="Number of trips in last time window"
             fullWidth
             variant="standard"
-            value={rule.weights?.tripsInLastTimeWindow?.value}
+            value={rule.weights?.tripsInLastTimeWindow}
             onChange={() => {}}
             InputLabelProps={{ shrink: true }}
           />
@@ -395,7 +387,7 @@ function PricingWeightsForm({ rule }) {
             label="Time window size (minutes)"
             fullWidth
             variant="standard"
-            value={rule.weights?.tripsInLastTimeWindow?.size}
+            value={rule.parameters?.timeWindowSize}
             onChange={() => {}}
             InputLabelProps={{ shrink: true }}
           />
@@ -436,8 +428,12 @@ export default function PricingRule() {
     loadRule();
   }, []);
 
-  const handleNext = () => {
-    setActiveStep(activeStep + 1);
+  const handleNext = async () => {
+    if (activeStep === steps.length - 1) {
+      await updatePricingRules(auth.user, rule);
+    } else {
+      setActiveStep(activeStep + 1);
+    }
   };
 
   const handleBack = () => {

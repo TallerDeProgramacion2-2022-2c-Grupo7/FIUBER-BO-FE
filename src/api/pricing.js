@@ -17,7 +17,7 @@ const getPricingRule = async (user) => {
   return data.result;
 };
 
-const getPricing = async (user, rules, { from, to }) => {
+const getPricing = async (user, rulesParams, tripParams) => {
   // const { user } = useAuth();
   const response = await fetch(`${REACT_APP_PRICING_URL}/costs/calculate`, {
     method: 'POST',
@@ -25,7 +25,7 @@ const getPricing = async (user, rules, { from, to }) => {
       'Content-Type': 'application/json',
       Authorization: user.stsTokenManager.accessToken,
     }),
-    body: JSON.stringify({ rules, from, to }),
+    body: JSON.stringify({ rulesParams, tripParams }),
   });
   const data = await response.json();
   if (!response.ok) {
@@ -34,4 +34,20 @@ const getPricing = async (user, rules, { from, to }) => {
   return data.result;
 };
 
-export { getPricingRule, getPricing };
+const updatePricingRules = async (user, rules) => {
+  const response = await fetch(`${REACT_APP_PRICING_URL}/rules`, {
+    method: 'POST',
+    headers: new Headers({
+      'Content-Type': 'application/json',
+      Authorization: user.stsTokenManager.accessToken,
+    }),
+    body: JSON.stringify(rules),
+  });
+  const data = await response.json();
+  if (!response.ok) {
+    throw new Error(data.detail);
+  }
+  return data.result;
+};
+
+export { getPricingRule, getPricing, updatePricingRules };
