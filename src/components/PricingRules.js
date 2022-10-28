@@ -13,7 +13,7 @@ import Container from './common/Container';
 import { RequireAuth, useAuth } from '../contexts/Auth';
 import { getPricing, getPricingRule, updatePricingRules } from '../api/pricing';
 
-const steps = ['Pricing weights', 'Pricing discounts', 'Rule review'];
+const steps = ['Pricing weights', 'Pricing discounts', 'Rules review'];
 
 // eslint-disable-next-line no-unused-vars
 function PricingWeightsForm({ rule, setRule }) {
@@ -195,6 +195,10 @@ function PricingDiscountsForm({ rule, setRule }) {
       const [latitude, longitude] = e.target.value.split(',');
       updatedRule.parameters.zoneCenter.latitude = latitude;
       updatedRule.parameters.zoneCenter.longitude = longitude;
+    } else if (e.target.id === 'timeDays') {
+      updatedRule.parameters.timeDays = e.target.value.split(',');
+    } else if (e.target.id === 'timeHours') {
+      updatedRule.parameters.timeHours = e.target.value.split('-');
     } else {
       updatedRule.parameters[e.target.id] = e.target.value;
     }
