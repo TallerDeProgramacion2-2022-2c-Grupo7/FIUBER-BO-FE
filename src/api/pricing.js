@@ -1,10 +1,10 @@
 // import { useAuth } from '../contexts/Auth';
 
-const { REACT_APP_PRICING_URL } = process.env;
+const { REACT_APP_TRIPS_URL } = process.env;
 
 const getPricingRule = async (user) => {
   // const { user } = useAuth();
-  const response = await fetch(`${REACT_APP_PRICING_URL}/rules`, {
+  const response = await fetch(`${REACT_APP_TRIPS_URL}/rules`, {
     method: 'GET',
     headers: new Headers({
       Authorization: user.stsTokenManager.accessToken,
@@ -19,7 +19,7 @@ const getPricingRule = async (user) => {
 
 const getPricing = async (user, rulesParams, tripParams) => {
   // const { user } = useAuth();
-  const response = await fetch(`${REACT_APP_PRICING_URL}/costs/calculate`, {
+  const response = await fetch(`${REACT_APP_TRIPS_URL}/costs/calculate`, {
     method: 'POST',
     headers: new Headers({
       'Content-Type': 'application/json',
@@ -35,7 +35,7 @@ const getPricing = async (user, rulesParams, tripParams) => {
 };
 
 const updatePricingRules = async (user, rules) => {
-  const response = await fetch(`${REACT_APP_PRICING_URL}/rules`, {
+  const response = await fetch(`${REACT_APP_TRIPS_URL}/rules`, {
     method: 'POST',
     headers: new Headers({
       'Content-Type': 'application/json',
