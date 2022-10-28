@@ -9,6 +9,7 @@ import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Grid';
 import TextField from '@mui/material/TextField';
 import InfoIcon from '@mui/icons-material/Info';
+import { Alert, AlertTitle } from '@mui/material';
 import Container from './common/Container';
 import { RequireAuth, useAuth } from '../contexts/Auth';
 import { getPricing, getPricingRule, updatePricingRules } from '../api/pricing';
@@ -464,6 +465,7 @@ export default function PricingRule() {
   const [activeStep, setActiveStep] = useState(0);
   const [rule, setRule] = useState({});
   const [testPrice, setTestPrice] = useState(null);
+  const [message, setMessage] = useState({});
   const auth = useAuth();
 
   useEffect(() => {
@@ -478,7 +480,13 @@ export default function PricingRule() {
 
   const handleNext = async () => {
     if (activeStep === steps.length - 1) {
-      await updatePricingRules(auth.user, rule);
+      try {
+        await updatePricingRules(auth.user, rule);
+        setMessage({ type: 'success', text: 'Rules updated successfully.' });
+      } catch (error) {
+        setMessage({ type: 'error', text: 'Update failed. Please try again.' });
+      }
+      setTimeout(() => setMessage({}), 3000);
     } else {
       setActiveStep(activeStep + 1);
     }
@@ -507,6 +515,12 @@ export default function PricingRule() {
   return (
     <RequireAuth>
       <Container component="main" maxWidth="sm" sx={{ mb: 4 }}>
+        {message.text
+        && (
+        <Alert severity={message.type} sx={{ marginTop: '1rem' }}>
+          <AlertTitle>{ message.text }</AlertTitle>
+        </Alert>
+        )}
         <Paper variant="outlined" sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}>
           <Typography component="h1" variant="h4" align="center">
             Update pricing rules
@@ -530,7 +544,7 @@ export default function PricingRule() {
                   <>
                     <Typography>
                       Final price: $
-                      { testPrice || '-' }
+                      { testPrice ? Math.round(testPrice * 100) / 100 : '-' }
                     </Typography>
                     <Button variant="outlined" onClick={handleTestRules} sx={{ mt: 3, ml: 1 }}>
                       Test rules
