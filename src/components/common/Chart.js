@@ -10,7 +10,7 @@ import Title from './Title';
 
 export default function Chart({ data }) {
   const theme = useTheme();
-  const [metric, setMetric] = React.useState('logins');
+  const [metric, setMetric] = React.useState('login');
 
   const handleChange = (event) => {
     setMetric(event.target.value);
@@ -38,9 +38,9 @@ export default function Chart({ data }) {
               label="Metric"
               onChange={handleChange}
             >
-              <MenuItem value="logins">Logins</MenuItem>
-              <MenuItem value="signups">Signups</MenuItem>
-              <MenuItem value="passwordResets">Password resets</MenuItem>
+              <MenuItem value="login">Logins</MenuItem>
+              <MenuItem value="signup">Signups</MenuItem>
+              <MenuItem value="passwordReset">Password resets</MenuItem>
             </Select>
           </FormControl>
         </Box>
@@ -57,7 +57,7 @@ export default function Chart({ data }) {
         >
           <CartesianGrid strokeDasharray="3 3" />
           <XAxis
-            dataKey="time"
+            dataKey="date"
             stroke={theme.palette.text.secondary}
             style={theme.typography.body2}
           />
@@ -81,7 +81,7 @@ export default function Chart({ data }) {
           <Line
             isAnimationActive
             type="linear"
-            dataKey="amount"
+            dataKey="count"
             stroke={theme.palette.primary.main}
             dot
           />
