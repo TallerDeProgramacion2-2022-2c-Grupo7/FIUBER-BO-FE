@@ -128,6 +128,20 @@ function AuthProvider({ children }) {
     return data.result;
   };
 
+  const getUsersSummary = async () => {
+    const response = await fetch(`${process.env.REACT_APP_METRICS_URL}/usersSummary`, {
+      method: 'GET',
+      headers: new Headers({
+        Authorization: `Bearer ${user.stsTokenManager.accessToken}`,
+      }),
+    });
+    const data = await response.json();
+    if (!response.ok) {
+      throw new Error(data.detail);
+    }
+    return data.result;
+  };
+
   const value = {
     user,
     login,
@@ -139,6 +153,7 @@ function AuthProvider({ children }) {
     sendPasswordReset,
     listRecentEvents,
     listMetrics,
+    getUsersSummary,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

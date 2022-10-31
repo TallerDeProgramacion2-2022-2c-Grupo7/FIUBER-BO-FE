@@ -12,6 +12,7 @@ export default function Dashboard() {
   const auth = useAuth();
   const [recentEvents, setRecentEvents] = useState([]);
   const [metrics, setMetrics] = useState([]);
+  const [summary, setSummary] = useState({});
 
   useEffect(() => {
     document.title = 'Dashboard - FIUBER Backoffice';
@@ -26,8 +27,14 @@ export default function Dashboard() {
       setMetrics(metricsList);
     };
 
+    const loadSummary = async () => {
+      const usersSummary = await auth.getUsersSummary();
+      setSummary(usersSummary);
+    };
+
     loadRecentEvents();
     loadMetrics();
+    loadSummary();
   }, []);
 
   return (
@@ -58,15 +65,15 @@ export default function Dashboard() {
               <>
                 <Title>Total users</Title>
                 <Typography component="p" variant="h4">
-                  10
+                  {summary.total_users}
                 </Typography>
                 <Title>Total blocked users</Title>
                 <Typography component="p" variant="h4">
-                  2
+                  {summary.total_blocked_users}
                 </Typography>
                 <Title>Total admins</Title>
                 <Typography component="p" variant="h4">
-                  2
+                  {summary.total_admins}
                 </Typography>
               </>
             </Paper>
