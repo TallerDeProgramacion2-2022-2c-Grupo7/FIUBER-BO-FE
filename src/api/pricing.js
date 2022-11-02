@@ -1,53 +1,16 @@
-// import { useAuth } from '../contexts/Auth';
+import makeRequest from './base';
 
 const { REACT_APP_TRIPS_URL } = process.env;
+const request = async (args) => makeRequest({ baseURL: REACT_APP_TRIPS_URL, ...args });
 
-const getPricingRule = async (user) => {
-  // const { user } = useAuth();
-  const response = await fetch(`${REACT_APP_TRIPS_URL}/rules`, {
-    method: 'GET',
-    headers: new Headers({
-      Authorization: user.stsTokenManager.accessToken,
-    }),
-  });
-  const data = await response.json();
-  if (!response.ok) {
-    throw new Error(data.detail);
-  }
-  return data.result;
-};
+const getPricingRule = async (user) => request({ user, method: 'GET', endpoint: '/rules' });
 
-const getPricing = async (user, rulesParams, tripParams) => {
-  // const { user } = useAuth();
-  const response = await fetch(`${REACT_APP_TRIPS_URL}/costs/calculate`, {
-    method: 'POST',
-    headers: new Headers({
-      'Content-Type': 'application/json',
-      Authorization: user.stsTokenManager.accessToken,
-    }),
-    body: JSON.stringify({ rulesParams, tripParams }),
-  });
-  const data = await response.json();
-  if (!response.ok) {
-    throw new Error(data.detail);
-  }
-  return data.result;
-};
+const getPricing = async (user, rulesParams, tripParams) => request({
+  user, method: 'POST', endpoint: '/rules', bodyParams: { rulesParams, tripParams },
+});
 
-const updatePricingRules = async (user, rules) => {
-  const response = await fetch(`${REACT_APP_TRIPS_URL}/rules`, {
-    method: 'POST',
-    headers: new Headers({
-      'Content-Type': 'application/json',
-      Authorization: user.stsTokenManager.accessToken,
-    }),
-    body: JSON.stringify(rules),
-  });
-  const data = await response.json();
-  if (!response.ok) {
-    throw new Error(data.detail);
-  }
-  return data.result;
-};
+const updatePricingRules = async (user, rules) => request({
+  user, method: 'POST', endpoint: '/rules', bodyParams: rules,
+});
 
 export { getPricingRule, getPricing, updatePricingRules };

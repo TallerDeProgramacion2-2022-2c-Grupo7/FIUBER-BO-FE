@@ -7,27 +7,36 @@ import CommonTable from './common/Table';
 import Chart from './common/Chart';
 import CommonContainer from './common/Container';
 import Title from './common/Title';
+import metrics from '../api/metrics';
 
 export default function Dashboard() {
   const auth = useAuth();
+  const { user } = auth;
   const [recentEvents, setRecentEvents] = useState([]);
-  const [metrics, setMetrics] = useState([]);
+  const [stats, setStats] = useState([]);
+  const [summary, setSummary] = useState({});
 
   useEffect(() => {
     document.title = 'Dashboard - FIUBER Backoffice';
 
     const loadRecentEvents = async () => {
-      const events = await auth.listRecentEvents();
+      const events = await metrics.listRecentEvents(user, 5);
       setRecentEvents(events);
     };
 
     const loadMetrics = async () => {
-      const metricsList = await auth.listMetrics();
-      setMetrics(metricsList);
+      const metricsList = await metrics.getStats(user);
+      setStats(metricsList);
+    };
+
+    const loadSummary = async () => {
+      const usersSummary = await metrics.getUsersSummary(user);
+      setSummary(usersSummary);
     };
 
     loadRecentEvents();
     loadMetrics();
+    loadSummary();
   }, []);
 
   return (
@@ -43,7 +52,7 @@ export default function Dashboard() {
                 height: 300,
               }}
             >
-              <Chart data={metrics} />
+              <Chart data={stats} />
             </Paper>
           </Grid>
           <Grid item xs={12} md={4} lg={3}>
@@ -58,15 +67,15 @@ export default function Dashboard() {
               <>
                 <Title>Total users</Title>
                 <Typography component="p" variant="h4">
-                  10
+                  {summary.total_users}
                 </Typography>
                 <Title>Total blocked users</Title>
                 <Typography component="p" variant="h4">
-                  2
+                  {summary.total_blocked_users}
                 </Typography>
                 <Title>Total admins</Title>
                 <Typography component="p" variant="h4">
-                  2
+                  {summary.total_admins}
                 </Typography>
               </>
             </Paper>

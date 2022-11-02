@@ -8,6 +8,7 @@ import Container from './common/Container';
 import PopUpMenu from './common/PopUpMenu';
 import StatusText from './common/StatusText';
 import EmailLink from './common/EmailLink';
+import users from '../api/users';
 
 export default function UsersContent() {
   const navigate = useNavigate();
@@ -15,7 +16,7 @@ export default function UsersContent() {
   const [usersList, setUsersList] = useState([]);
 
   const loadUsers = async () => {
-    const result = await auth.listUsers({ max_results: 1000 });
+    const result = await users.list(auth.user, { max_results: 1000 });
     setUsersList(result);
   };
 
@@ -32,7 +33,7 @@ export default function UsersContent() {
         {
           text: 'View profile',
           handler: async () => {
-            const userInfo = await auth.getUser(user.uid);
+            const userInfo = await users.get(auth.user, user.uid);
             navigate('/profile', { replace: true, state: { user: userInfo } });
           },
         },
@@ -42,7 +43,11 @@ export default function UsersContent() {
           popUpTitle: `Are you sure you want to ${user.is_active ? 'block' : 'unblock'} this user?`,
           popUpDetail: user.is_active ? 'The user will not be able to sign in until it is unblocked.' : 'The user will be able to use the app again.',
           handler: async () => {
-            await auth.setUserStatus(user.uid, !user.is_active);
+            if (user.is_active) {
+              await users.block(auth.user, user.uid);
+            } else {
+              await users.unblock(auth.user, user.uid);
+            }
             await loadUsers();
           },
         },
