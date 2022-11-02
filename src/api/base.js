@@ -10,7 +10,7 @@ const makeRequest = async ({
   if (!response.ok) {
     throw new Error(data.detail);
   }
-  return data.result;
+  return data?.result;
 };
 
 export default makeRequest;

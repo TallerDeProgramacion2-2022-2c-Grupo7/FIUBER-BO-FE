@@ -5,14 +5,14 @@ const request = async (args) => makeRequest({ baseURL: REACT_APP_USERS_URL, ...a
 
 const list = async (user, params) => request({ user, method: 'GET', queryParams: params });
 
-const get = async (user, uid) => request({ user, method: 'GET', endpoint: uid });
+const get = async (user, uid) => request({ user, method: 'GET', endpoint: `/${uid}` });
 
 const block = async (user, uid) => request({
-  user, method: 'PATCH', endpoint: uid, queryParams: { active: false },
+  user, method: 'PATCH', endpoint: `/${uid}`, queryParams: { active: false },
 });
 
 const unblock = async (user, uid) => request({
-  user, method: 'PATCH', endpoint: uid, queryParams: { active: true },
+  user, method: 'PATCH', endpoint: `/${uid}`, queryParams: { active: true },
 });
 
 export default {

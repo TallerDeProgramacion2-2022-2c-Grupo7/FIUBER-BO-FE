@@ -51,95 +51,8 @@ function AuthProvider({ children }) {
     await createAdmin({ email, password });
   };
 
-  const listUsers = async (params) => {
-    const response = await fetch(`${process.env.REACT_APP_USERS_URL}?${new URLSearchParams(params)}`, {
-      method: 'GET',
-      headers: new Headers({
-        Authorization: `Bearer ${user.stsTokenManager.accessToken}`,
-      }),
-    });
-    const data = await response.json();
-    if (!response.ok) {
-      throw new Error(data.detail);
-    }
-    return data.result;
-  };
-
-  const getUser = async (uid) => {
-    const response = await fetch(`${process.env.REACT_APP_USERS_URL}/${uid}`, {
-      method: 'GET',
-      headers: new Headers({
-        Authorization: `Bearer ${user.stsTokenManager.accessToken}`,
-      }),
-    });
-    const data = await response.json();
-    if (!response.ok) {
-      throw new Error(data.detail);
-    }
-    return data.result;
-  };
-
-  const setUserStatus = async (uid, status) => {
-    const response = await fetch(`${process.env.REACT_APP_USERS_URL}/${uid}?active=${status}`, {
-      method: 'PATCH',
-      headers: new Headers({
-        Authorization: `Bearer ${user.stsTokenManager.accessToken}`,
-      }),
-    });
-
-    if (!response.ok) {
-      const data = await response.json();
-      throw new Error(data.detail);
-    }
-  };
-
   const sendPasswordReset = async (email) => {
     await sendPasswordResetEmail(auth, email);
-  };
-
-  const listRecentEvents = async () => {
-    const response = await fetch(`${process.env.REACT_APP_METRICS_URL}?max_results=10`, {
-      method: 'GET',
-      headers: new Headers({
-        Authorization: `Bearer ${user.stsTokenManager.accessToken}`,
-      }),
-    });
-    const data = await response.json();
-    if (!response.ok) {
-      throw new Error(data.detail);
-    }
-    return data.result.map((event) => ({
-      id: event.event_id,
-      fields: [event.datetime, event.user_id, event.event_type],
-    }));
-  };
-
-  const listMetrics = async () => {
-    const response = await fetch(`${process.env.REACT_APP_METRICS_URL}/stats`, {
-      method: 'GET',
-      headers: new Headers({
-        Authorization: `Bearer ${user.stsTokenManager.accessToken}`,
-      }),
-    });
-    const data = await response.json();
-    if (!response.ok) {
-      throw new Error(data.detail);
-    }
-    return data.result;
-  };
-
-  const getUsersSummary = async () => {
-    const response = await fetch(`${process.env.REACT_APP_METRICS_URL}/usersSummary`, {
-      method: 'GET',
-      headers: new Headers({
-        Authorization: `Bearer ${user.stsTokenManager.accessToken}`,
-      }),
-    });
-    const data = await response.json();
-    if (!response.ok) {
-      throw new Error(data.detail);
-    }
-    return data.result;
   };
 
   const value = {
@@ -147,13 +60,7 @@ function AuthProvider({ children }) {
     login,
     logout,
     createUser,
-    listUsers,
-    setUserStatus,
-    getUser,
     sendPasswordReset,
-    listRecentEvents,
-    listMetrics,
-    getUsersSummary,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
