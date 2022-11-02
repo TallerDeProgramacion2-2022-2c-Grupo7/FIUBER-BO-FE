@@ -19,6 +19,7 @@ jobs:
         run: >
           echo "REACT_APP_USERS_URL=${{ secrets.REACT_APP_USERS_URL }}" >> ./.env
           && echo "REACT_APP_TRIPS_URL=${{ secrets.REACT_APP_TRIPS_URL }}" >> ./.env
+          && echo "REACT_APP_METRICS_URL=${{ secrets.REACT_APP_METRICS_URL }}" >> ./.env
       -
         name: Set up QEMU
         uses: docker/setup-qemu-action@v2
