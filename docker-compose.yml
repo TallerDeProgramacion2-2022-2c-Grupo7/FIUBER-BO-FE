@@ -1,0 +1,33 @@
+services:
+  postgres:
+    image: postgres
+    ports:
+      - 5432:5432
+    volumes:
+      - fiuber-metrics-db-volume:/var/lib/postgresql/data
+    environment:
+      PGDATA: /var/lib/postgresql/data/db/
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: postgres
+      POSTGRES_PORT: 5432
+  users:
+    build:
+      context: ../FIUBER-Users
+      dockerfile: Dockerfile
+    ports:
+      - 8001:8000
+  metrics:
+    build:
+      context: ../FIUBER-Metrics
+      dockerfile: Dockerfile
+    ports:
+      - 8003:8000
+    environment:
+      DATABASE_HOST: postgres
+    depends_on:
+      - postgres
+
+volumes:
+  fiuber-metrics-db-volume:
+    external: true
