@@ -17,7 +17,7 @@ export default function CommonTable({ title, headers, rows }) {
   return (
     <>
       <Title>{title}</Title>
-      <Table size="small">
+      <Table size="small" sx={{ mb: '2rem' }}>
         <TableHead>
           <TableRow>
             {headers.map((header) => (
