@@ -10,12 +10,26 @@ services:
       POSTGRES_PASSWORD: admin
       POSTGRES_DB: postgres
       POSTGRES_PORT: 5432
+  mongo:
+    image: mongo:6.0.2
+    ports:
+      - 27017:27017
   users:
     build:
       context: ../FIUBER-Users
       dockerfile: Dockerfile
     ports:
       - 8001:8000
+  trips:
+    build:
+      context: ../FIUBER-Trips
+      dockerfile: Dockerfile
+    ports:
+      - 8002:8000
+    environment:
+      GOOGLE_APPLICATION_CREDENTIALS: service-account-file.json
+    depends_on:
+      - mongo
   metrics:
     build:
       context: ../FIUBER-Metrics
