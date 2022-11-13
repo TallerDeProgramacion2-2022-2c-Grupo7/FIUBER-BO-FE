@@ -28,6 +28,7 @@ services:
       - 8002:8000
     environment:
       GOOGLE_APPLICATION_CREDENTIALS: service-account-file.json
+      DB_HOST: mongo
     depends_on:
       - mongo
   metrics:
