@@ -5,7 +5,11 @@ const makeRequest = async ({
 }) => {
   const response = await fetch(`${baseURL}${endpoint}?${new URLSearchParams(queryParams)}`, {
     method,
-    headers: new Headers({ Authorization: `${user.stsTokenManager.accessToken}` }),
+    headers: new Headers({
+      Authorization: `${user.stsTokenManager.accessToken}`,
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    }),
     body: JSON.stringify(bodyParams),
   });
   const data = await response.json();
