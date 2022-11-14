@@ -24,11 +24,17 @@ const request = async (args) => makeRequest({ baseURL: REACT_APP_TRIPS_URL, ...a
 const getPricingRule = async (user) => request({ user, method: 'GET', endpoint: '/rules' });
 
 const getPricing = async (user, rulesParams, tripParams) => request({
-  user, method: 'POST', endpoint: '/rules', bodyParams: { rulesParams, tripParams },
+  user, method: 'POST', endpoint: '/costs/calculate', bodyParams: { rulesParams, tripParams },
 });
 
 const updatePricingRules = async (user, rules) => request({
   user, method: 'POST', endpoint: '/rules', bodyParams: rules,
 });
 
-export { getPricingRule, getPricing, updatePricingRules };
+const getMetricsForUser = async (user, uid) => request({
+  user, method: 'GET', endpoint: '/trips/metrics', queryParams: { uid },
+});
+
+export {
+  getPricingRule, getPricing, updatePricingRules, getMetricsForUser,
+};

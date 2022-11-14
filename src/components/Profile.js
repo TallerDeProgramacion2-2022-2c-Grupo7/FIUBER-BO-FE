@@ -1,17 +1,27 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { Grid, Paper, Typography } from '@mui/material';
-import { RequireAuth } from '../contexts/Auth';
+import { RequireAuth, useAuth } from '../contexts/Auth';
 import Container from './common/Container';
 import CommonTable from './common/Table';
 import StatusText from './common/StatusText';
 import EmailLink from './common/EmailLink';
+import { getMetricsForUser } from '../api/trips';
 
 export default function Profile() {
+  const auth = useAuth();
   const location = useLocation();
   const user = location.state?.user;
+  const [tripMetrics, setTripMetrics] = useState({});
   useEffect(() => {
     document.title = 'User profile - FIUBER Backoffice';
+
+    const loadTripMetrics = async () => {
+      const result = await getMetricsForUser(auth.user, user.uid);
+      setTripMetrics(result);
+    };
+
+    loadTripMetrics();
   }, []);
   const fullName = (user.first_name && user.last_name) ? `${user.first_name} ${user.last_name}` : '';
   return (
@@ -37,9 +47,9 @@ export default function Profile() {
                 title="Metrics"
                 headers={['', '']}
                 rows={[
-                  { id: 1, fields: [<Typography fontSize="inherit">Trips taken</Typography>, 7] },
-                  { id: 2, fields: [<Typography fontSize="inherit">Trips cancelled</Typography>, 1] },
-                  { id: 3, fields: [<Typography fontSize="inherit">Ratings made</Typography>, 3] },
+                  { id: 1, fields: [<Typography fontSize="inherit">Trips as a passenger</Typography>, tripMetrics.tripsAsPassenger || 0] },
+                  { id: 2, fields: [<Typography fontSize="inherit">Trips as a driver</Typography>, tripMetrics.tripsAsDriver || 0] },
+                  { id: 3, fields: [<Typography fontSize="inherit">Ratings made</Typography>, 0] },
                 ]}
               />
             </Paper>
