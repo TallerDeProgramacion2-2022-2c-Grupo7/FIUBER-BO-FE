@@ -12,7 +12,7 @@ import InfoIcon from '@mui/icons-material/Info';
 import { Alert, AlertTitle } from '@mui/material';
 import Container from './common/Container';
 import { RequireAuth, useAuth } from '../contexts/Auth';
-import { getPricing, getPricingRule, updatePricingRules } from '../api/pricing';
+import { getPricing, getPricingRule, updatePricingRules } from '../api/trips';
 
 const steps = ['Pricing weights', 'Pricing discounts', 'Rules review'];
 
@@ -500,12 +500,16 @@ export default function PricingRule() {
     const getValue = (id) => document.getElementById(id).value;
     const testTrip = {
       from: {
-        latitude: window.parseFloat(getValue('testTripFrom').split(',')[0]),
-        longitude: window.parseFloat(getValue('testTripFrom').split(',')[1]),
+        coordinates: {
+          latitude: window.parseFloat(getValue('testTripFrom').split(',')[0]),
+          longitude: window.parseFloat(getValue('testTripFrom').split(',')[1]),
+        },
       },
       to: {
-        latitude: window.parseFloat(getValue('testTripTo').split(',')[0]),
-        longitude: window.parseFloat(getValue('testTripTo').split(',')[1]),
+        coordinates: {
+          latitude: window.parseFloat(getValue('testTripTo').split(',')[0]),
+          longitude: window.parseFloat(getValue('testTripTo').split(',')[1]),
+        },
       },
     };
     const price = await getPricing(auth.user, rule, testTrip);
