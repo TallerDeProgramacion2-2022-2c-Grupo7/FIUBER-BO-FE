@@ -17,7 +17,7 @@ title: FIUBER BackOffice
 email: fiubatallergrupo7@gmail.com
 description: >- # this means to ignore newlines until "baseurl:"
   Guía de usuario
-baseurl: "" # the subpath of your site, e.g. /blog
+baseurl: "/FIUBER-BackOffice" # the subpath of your site, e.g. /blog
 url: "" # the base hostname & protocol for your site, e.g. http://example.com
 github_username: TallerDeProgramacion2-2022-2c-Grupo7
 
