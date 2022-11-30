@@ -14,7 +14,7 @@ const listRecentEvents = async (user, maxResults) => {
 };
 
 const createEvent = async (user, eventType, uid) => request({
-  user, method: 'POST', endpoint: eventType, queryParams: { uid },
+  user, method: 'POST', endpoint: `/${eventType}`, queryParams: { uid },
 });
 
 const getStats = async (user) => request({
