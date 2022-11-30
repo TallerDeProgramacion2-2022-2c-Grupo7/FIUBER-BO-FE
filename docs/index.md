@@ -27,6 +27,7 @@ Los tipos de eventos disponibles son los siguientes:
 * Signups
 * Password resets
 * User blocks
+* User unblocks
 
 * * *
 
