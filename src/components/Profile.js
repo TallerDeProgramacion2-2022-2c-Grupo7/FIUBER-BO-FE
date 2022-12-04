@@ -39,8 +39,9 @@ export default function Profile() {
                   { id: 3, fields: [<Typography fontSize="inherit">Full name</Typography>, fullName || '-'] },
                   { id: 4, fields: [<Typography fontSize="inherit">Email address</Typography>, <EmailLink emailAddress={user.email} />] },
                   { id: 5, fields: [<Typography fontSize="inherit">Car model</Typography>, user.car_model || '-'] },
-                  { id: 6, fields: [<Typography fontSize="inherit">Signup datetime</Typography>, user.creation_datetime] },
-                  { id: 7, fields: [<Typography fontSize="inherit">Last signin datetime</Typography>, user.last_sign_in_datetime] },
+                  { id: 6, fields: [<Typography fontSize="inherit">Car plate</Typography>, user.car_plate || '-'] },
+                  { id: 7, fields: [<Typography fontSize="inherit">Signup datetime</Typography>, user.creation_datetime] },
+                  { id: 8, fields: [<Typography fontSize="inherit">Last signin datetime</Typography>, user.last_sign_in_datetime] },
                 ]}
               />
               <CommonTable
