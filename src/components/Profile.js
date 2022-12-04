@@ -35,13 +35,14 @@ export default function Profile() {
                 headers={['', '']}
                 rows={[
                   { id: 1, fields: [<Typography fontSize="inherit">User ID</Typography>, user.uid] },
-                  { id: 2, fields: [<Typography fontSize="inherit">Status</Typography>, <StatusText active={user.is_active} />] },
-                  { id: 3, fields: [<Typography fontSize="inherit">Full name</Typography>, fullName || '-'] },
-                  { id: 4, fields: [<Typography fontSize="inherit">Email address</Typography>, <EmailLink emailAddress={user.email} />] },
-                  { id: 5, fields: [<Typography fontSize="inherit">Car model</Typography>, user.car_model || '-'] },
-                  { id: 6, fields: [<Typography fontSize="inherit">Car plate</Typography>, user.car_plate || '-'] },
-                  { id: 7, fields: [<Typography fontSize="inherit">Signup datetime</Typography>, user.creation_datetime] },
-                  { id: 8, fields: [<Typography fontSize="inherit">Last signin datetime</Typography>, user.last_sign_in_datetime] },
+                  { id: 2, fields: [<Typography fontSize="inherit">User type</Typography>, (user.is_admin === true) ? 'Admin' : 'User'] },
+                  { id: 3, fields: [<Typography fontSize="inherit">Status</Typography>, <StatusText active={user.is_active} />] },
+                  { id: 4, fields: [<Typography fontSize="inherit">Full name</Typography>, fullName || '-'] },
+                  { id: 5, fields: [<Typography fontSize="inherit">Email address</Typography>, <EmailLink emailAddress={user.email} />] },
+                  { id: 6, fields: [<Typography fontSize="inherit">Car model</Typography>, user.car_model || '-'] },
+                  { id: 7, fields: [<Typography fontSize="inherit">Car plate</Typography>, user.car_plate || '-'] },
+                  { id: 8, fields: [<Typography fontSize="inherit">Signup datetime</Typography>, user.creation_datetime] },
+                  { id: 9, fields: [<Typography fontSize="inherit">Last signin datetime</Typography>, user.last_sign_in_datetime] },
                 ]}
               />
               <CommonTable
