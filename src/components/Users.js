@@ -9,6 +9,7 @@ import PopUpMenu from './common/PopUpMenu';
 import StatusText from './common/StatusText';
 import EmailLink from './common/EmailLink';
 import users from '../api/users';
+import metrics from '../api/metrics';
 
 export default function UsersContent() {
   const navigate = useNavigate();
@@ -45,8 +46,10 @@ export default function UsersContent() {
           handler: async () => {
             if (user.is_active) {
               await users.block(auth.user, user.uid);
+              metrics.createEvent(auth.user, 'block', user.uid);
             } else {
               await users.unblock(auth.user, user.uid);
+              metrics.createEvent(auth.user, 'unblock', user.uid);
             }
             await loadUsers();
           },

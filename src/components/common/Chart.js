@@ -42,8 +42,8 @@ export default function Chart({ data }) {
               <MenuItem value="signup">Signups</MenuItem>
               <MenuItem value="passwordReset">Password resets</MenuItem>
               <MenuItem value="federatedLogin">Federated logins</MenuItem>
-              <MenuItem value="federatedSignup">Federated signups</MenuItem>
               <MenuItem value="block">User blocks</MenuItem>
+              <MenuItem value="unblock">User unblocks</MenuItem>
             </Select>
           </FormControl>
         </Box>
